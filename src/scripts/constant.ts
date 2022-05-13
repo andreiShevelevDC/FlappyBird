@@ -32,6 +32,9 @@ export const GRAVITY = 400;
 export const GRAVITY_ZERO = 0;
 export const FLAP_VELOCITY = 250;
 
+export const IMAGE_PIPE = "image_pipe";
+export const IMAGE_PIPE_BOTTOM = "image_pipe_bottom";
+
 // TODO: can I get sizes from image itself?
 export const PIPE_WIDTH = 60;
 export const PIPE_HEIGHT = 530;

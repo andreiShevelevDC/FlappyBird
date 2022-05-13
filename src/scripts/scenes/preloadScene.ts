@@ -1,4 +1,4 @@
-import { SPRITESHEET_BIRD } from "../constant";
+import {IMAGE_PIPE, IMAGE_PIPE_BOTTOM, SPRITESHEET_BIRD} from "../constant";
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -7,8 +7,8 @@ export default class PreloadScene extends Phaser.Scene {
 
   preload() {
     this.load.image("image_back", "assets/back.png");
-    this.load.image("image_pipe", "assets/pipe.png");
-    this.load.image("image_pipe_bottom", "assets/pipe_bottom.png");
+    this.load.image(IMAGE_PIPE, "assets/pipe.png");
+    this.load.image(IMAGE_PIPE_BOTTOM, "assets/pipe_bottom.png");
 
     this.load.spritesheet(SPRITESHEET_BIRD, "assets/bird.png", {
       frameWidth: 16,

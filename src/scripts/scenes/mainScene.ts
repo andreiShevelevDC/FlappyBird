@@ -1,5 +1,6 @@
 import * as constant from './../constant'
 import {BirdComponent} from "../views/bird-component";
+import {PipeComponent} from "../views/pipe-component";
 
 import Phaser from "phaser";
 
@@ -103,7 +104,7 @@ export default class MainScene extends Phaser.Scene {
 
     // death 'animation'
     this.bird.setVelocityY(constant.FLAP_VELOCITY);
-    this.bird.setCollideWorldBounds(false);
+    //this.bird.setCollideWorldBounds(false);
 
     this.scoreMessage.setVisible(false);
 
@@ -194,17 +195,8 @@ export default class MainScene extends Phaser.Scene {
     //console.log(holeCenter, " / ", holeWidth);
     this.prevHoleCenter = holeCenter;
 
-    this.pipesTop.create(
-        constant.GAME_WIDTH + constant.PIPE_WIDTH / 2,
-        holeCenter - (holeWidth + constant.PIPE_HEIGHT) / 2,
-        "image_pipe"
-    );
-
-    this.pipesBottom.create(
-        constant.GAME_WIDTH + constant.PIPE_WIDTH / 2,
-        holeCenter + (holeWidth + constant.PIPE_HEIGHT) / 2,
-        "image_pipe_bottom"
-    );
+    this.pipesTop.add(new PipeComponent(this, true, holeCenter - (holeWidth + constant.PIPE_HEIGHT) / 2));
+    this.pipesBottom.add(new PipeComponent(this, false, holeCenter + (holeWidth + constant.PIPE_HEIGHT) / 2));
   }
 
   setPause(): void {
@@ -253,21 +245,14 @@ export default class MainScene extends Phaser.Scene {
       let allPipesTop: Phaser.GameObjects.GameObject[] = this.pipesTop.getChildren();
       let allPipesBottom: Phaser.GameObjects.GameObject[] = this.pipesBottom.getChildren();
 
-      for (let i = 0; i < allPipesTop.length; i++) {
-        // moving pipes RTL
-        (allPipesTop[i] as Phaser.Physics.Arcade.Sprite).x -= this.gameSpeed;
-        (allPipesBottom[i] as Phaser.Physics.Arcade.Sprite).x -= this.gameSpeed;
 
-        (allPipesTop[i] as Phaser.Physics.Arcade.Sprite).refreshBody();
-        (allPipesBottom[i] as Phaser.Physics.Arcade.Sprite).refreshBody();
+
+      for (let i = 0; i < allPipesTop.length; i++) {
+        (allPipesTop[i] as PipeComponent).move(this.gameSpeed);
+        (allPipesBottom[i] as PipeComponent).move(this.gameSpeed);
 
         // count the pipes pair that the bird has passed through
-        if (
-            (allPipesTop[i] as Phaser.Physics.Arcade.Sprite).x <=
-            constant.BIRD_POS_X &&
-            (allPipesTop[i] as Phaser.Physics.Arcade.Sprite).x >=
-            constant.BIRD_POS_X - this.gameSpeed - 1
-        ) {
+        if ((allPipesTop[i] as PipeComponent).isInCounterWindow(this.gameSpeed)) {
           this.counter++;
           this.scoreMessage.setText(constant.SCORE_MESSAGE_TEXT + this.counter);
         }
@@ -294,9 +279,7 @@ export default class MainScene extends Phaser.Scene {
 
       // destroys the first pair of pipes if it moved out of screen
       if (
-          allPipesTop.length !== 0 &&
-          (allPipesTop[0] as Phaser.Physics.Arcade.Sprite).x <
-          -constant.PIPE_WIDTH / 2
+          allPipesTop.length !== 0 && ((allPipesTop[0] as PipeComponent).isOutOfWindow())
       ) {
         this.pipesTop.remove(allPipesTop[0], true, true);
         this.pipesBottom.remove(allPipesBottom[0], true, true);
