@@ -1,3 +1,5 @@
+import { SPRITESHEET_BIRD } from "../constant";
+
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
     super({ key: 'PreloadScene' })
@@ -8,7 +10,7 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("image_pipe", "assets/pipe.png");
     this.load.image("image_pipe_bottom", "assets/pipe_bottom.png");
 
-    this.load.spritesheet("spritesheet_bird", "assets/bird.png", {
+    this.load.spritesheet(SPRITESHEET_BIRD, "assets/bird.png", {
       frameWidth: 16,
       frameHeight: 16,
     });

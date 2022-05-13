@@ -1,3 +1,5 @@
+//import Phaser from "phaser";
+
 export const GAME_WIDTH = 800;
 export const GAME_HEIGHT = 600;
 
@@ -7,8 +9,22 @@ export enum GAME_STATE {
   FINISH
 }
 
+export const SPRITESHEET_BIRD = "spritesheet_bird";
+
 export const BIRD_POS_X = GAME_WIDTH / 4;
 export const BIRD_POS_Y = GAME_HEIGHT / 2 - 100;
+
+export const BIRD_SCALE = 2;
+
+// export const BIRD_ANIMATION: Phaser.Types.Animations.Animation = {
+//   key: "flap",
+//   frames: anims.generateFrameNumbers(SPRITESHEET_BIRD, {
+//     start: 0,
+//     end: 3,
+//   }),
+//   frameRate: 10,
+//   repeat: 1,
+// }
 
 // starting pipes horizontal shift speed per update call
 export const ACCELERATION = 0.003;
@@ -40,7 +56,7 @@ export const SCORE_STYLE = {
 };
 export const SCORE_MESSAGE_TEXT = "Score: ";
 
-// vertical hole sizes
+// vertical hole (distance between top and bottom pipe) sizes
 export const HOLE_SIZE = [
   HOLE_GAP_STEP * PIPE_NUM,
   (HOLE_GAP_STEP * PIPE_NUM) / 1.5,

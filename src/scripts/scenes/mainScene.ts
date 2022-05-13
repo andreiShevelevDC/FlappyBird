@@ -1,6 +1,5 @@
-// import PhaserLogo from '../objects/phaserLogo'
-// import FpsText from '../objects/fpsText'
 import * as constant from './../constant'
+import {BirdComponent} from "../views/bird-component";
 
 import Phaser from "phaser";
 
@@ -12,7 +11,7 @@ export default class MainScene extends Phaser.Scene {
 
   pipesTop!: Phaser.GameObjects.Group;
   pipesBottom!: Phaser.GameObjects.Group;
-  bird!: Phaser.Physics.Arcade.Sprite;
+  bird!: BirdComponent;
 
   spacebarKey!: Phaser.Input.Keyboard.Key;
   escapeKey!: Phaser.Input.Keyboard.Key;
@@ -29,23 +28,13 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
-    // new PhaserLogo(this, this.cameras.main.width / 2, 0)
-    // this.fpsText = new FpsText(this)
-    //
-    // // display the Phaser.VERSION
-    // this.add
-    //   .text(this.cameras.main.width - 15, 15, `Phaser v${Phaser.VERSION}`, {
-    //     color: '#000000',
-    //     fontSize: '24px'
-    //   })
-    //   .setOrigin(1, 0)
-
     this.add.image(0, 0, "image_back").setOrigin(0, 0);
 
     this.pipesTop = this.physics.add.staticGroup();
     this.pipesBottom = this.physics.add.staticGroup();
 
-    this.makeBird(this.physics, this.anims);
+    this.bird = new BirdComponent(this);
+    //this.makeBird(this.physics, this.anims);
 
     //this.physics.add.collider(bird, pipes, birdCollide, null, this);
     this.physics.add.overlap(
@@ -96,27 +85,6 @@ export default class MainScene extends Phaser.Scene {
     this.gameRestart();
   }
 
-  makeBird(
-      physics: Phaser.Physics.Arcade.ArcadePhysics,
-      anims: Phaser.Animations.AnimationManager
-  ): void {
-    this.bird = physics.add
-        .sprite(constant.BIRD_POS_X, constant.BIRD_POS_Y, "spritesheet_bird")
-        .setScale(2);
-    this.bird.setBounce(0.2);
-    //bird.setCollideWorldBounds(true);
-
-    anims.create({
-      key: "flap",
-      frames: anims.generateFrameNumbers("spritesheet_bird", {
-        start: 0,
-        end: 3,
-      }),
-      frameRate: 10,
-      repeat: 1,
-    });
-  }
-
   birdFlap(): void {
     //console.log("flap");
     if (this.gameState === constant.GAME_STATE.PAUSE) {
@@ -156,8 +124,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.counterSpeedUp = 1;
 
-    this.bird.setCollideWorldBounds(true);
-    this.bird.setPosition(constant.BIRD_POS_X, constant.BIRD_POS_Y);
+    this.bird.restart();
 
     this.addPipes();
     this.setPause();
