@@ -7,7 +7,7 @@ import Phaser from "phaser";
 export default class MainScene extends Phaser.Scene {
   //fpsText
 
-  gameState: number = constant.GAME_STATE_FINISH;
+  gameState: number = constant.GAME_STATE.FINISH;
   gameSpeed: number = constant.GAME_WIDTH * constant.ACCELERATION;
 
   pipesTop!: Phaser.GameObjects.Group;
@@ -119,7 +119,7 @@ export default class MainScene extends Phaser.Scene {
 
   birdFlap(): void {
     //console.log("flap");
-    if (this.gameState === constant.GAME_STATE_PAUSE) {
+    if (this.gameState === constant.GAME_STATE.PAUSE) {
       this.setPlay();
     }
 
@@ -131,7 +131,7 @@ export default class MainScene extends Phaser.Scene {
     //setPause();
     //console.log("Overlap");
 
-    this.gameState = constant.GAME_STATE_FINISH;
+    this.gameState = constant.GAME_STATE.FINISH;
 
     // death 'animation'
     this.bird.setVelocityY(constant.FLAP_VELOCITY);
@@ -243,7 +243,7 @@ export default class MainScene extends Phaser.Scene {
   setPause(): void {
     //console.log(" * Pause");
 
-    this.gameState = constant.GAME_STATE_PAUSE;
+    this.gameState = constant.GAME_STATE.PAUSE;
     //GAME.scene.pause('default');
 
     (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(constant.GRAVITY_ZERO);
@@ -255,7 +255,7 @@ export default class MainScene extends Phaser.Scene {
   setPlay(): void {
     //console.log(" * Play");
 
-    this.gameState = constant.GAME_STATE_PLAY;
+    this.gameState = constant.GAME_STATE.PLAY;
 
     this.pauseMessage.setVisible(false);
 
@@ -265,13 +265,13 @@ export default class MainScene extends Phaser.Scene {
   pollKeyboard(): void {
     if (
         Phaser.Input.Keyboard.JustDown(this.escapeKey) &&
-        this.gameState === constant.GAME_STATE_PLAY
+        this.gameState === constant.GAME_STATE.PLAY
     ) {
       this.setPause();
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.spacebarKey)) {
-      if (this.gameState !== constant.GAME_STATE_FINISH) {
+      if (this.gameState !== constant.GAME_STATE.FINISH) {
         this.birdFlap();
         this.bird.anims.play("flap");
       } else this.gameRestart();
@@ -282,7 +282,7 @@ export default class MainScene extends Phaser.Scene {
     //this.fpsText.update()
     this.pollKeyboard();
 
-    if (this.gameState === constant.GAME_STATE_PLAY) {
+    if (this.gameState === constant.GAME_STATE.PLAY) {
       let allPipesTop: Phaser.GameObjects.GameObject[] = this.pipesTop.getChildren();
       let allPipesBottom: Phaser.GameObjects.GameObject[] = this.pipesBottom.getChildren();
 

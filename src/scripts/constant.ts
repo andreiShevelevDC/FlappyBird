@@ -1,9 +1,11 @@
 export const GAME_WIDTH = 800;
 export const GAME_HEIGHT = 600;
 
-export const GAME_STATE_PLAY = 0;
-export const GAME_STATE_PAUSE = 1;
-export const GAME_STATE_FINISH = 2;
+export enum GAME_STATE {
+  PLAY,
+  PAUSE,
+  FINISH
+}
 
 export const BIRD_POS_X = GAME_WIDTH / 4;
 export const BIRD_POS_Y = GAME_HEIGHT / 2 - 100;
@@ -38,7 +40,7 @@ export const SCORE_STYLE = {
 };
 export const SCORE_MESSAGE_TEXT = "Score: ";
 
-// vertical hole size
+// vertical hole sizes
 export const HOLE_SIZE = [
   HOLE_GAP_STEP * PIPE_NUM,
   (HOLE_GAP_STEP * PIPE_NUM) / 1.5,
@@ -47,8 +49,8 @@ export const HOLE_SIZE = [
   (HOLE_GAP_STEP * PIPE_NUM) / 4,
 ];
 
-// diff hole sizes
-// number of each value affects probability of appearing
+// hole sizes (index from HOLE_SIZE)
+// number of repetitions of each value affects probability of appearing
 export const HOLE_DIFFICULTY = [
   0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4,
 ];
