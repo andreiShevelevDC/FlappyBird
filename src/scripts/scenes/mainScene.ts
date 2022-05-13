@@ -5,8 +5,6 @@ import {PipeComponent} from "../views/pipe-component";
 import Phaser from "phaser";
 
 export default class MainScene extends Phaser.Scene {
-  //fpsText
-
   gameState: number = constant.GAME_STATE.FINISH;
   gameSpeed: number = constant.GAME_WIDTH * constant.ACCELERATION;
 
@@ -140,7 +138,6 @@ export default class MainScene extends Phaser.Scene {
       this.pipesTop.remove(allPipesTop[0], true, true);
       this.pipesBottom.remove(allPipesBottom[0], true, true);
 
-      //allPipes = pipes.getChildren();
     }
   }
 
@@ -238,14 +235,11 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
-    //this.fpsText.update()
     this.pollKeyboard();
 
     if (this.gameState === constant.GAME_STATE.PLAY) {
       let allPipesTop: Phaser.GameObjects.GameObject[] = this.pipesTop.getChildren();
       let allPipesBottom: Phaser.GameObjects.GameObject[] = this.pipesBottom.getChildren();
-
-
 
       for (let i = 0; i < allPipesTop.length; i++) {
         (allPipesTop[i] as PipeComponent).move(this.gameSpeed);

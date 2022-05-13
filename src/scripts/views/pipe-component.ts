@@ -1,11 +1,8 @@
 import * as constant from "./../constant";
-import Phaser from "phaser";
 
 export class PipeComponent extends Phaser.Physics.Arcade.Sprite {
-  //readonly isTop!: boolean;
 
   constructor(scene: Phaser.Scene, isTop:boolean, y: number) {
-
     let image_name: any;
     if(isTop) image_name = constant.IMAGE_PIPE;
     else image_name = constant.IMAGE_PIPE_BOTTOM;
@@ -14,7 +11,6 @@ export class PipeComponent extends Phaser.Physics.Arcade.Sprite {
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
-
   }
 
   // only RTL
