@@ -57,7 +57,7 @@ export const SCORE_STYLE = {
   fill: "#00ff00",
   align: "right",
 };
-export const SCORE_MESSAGE_TEXT = "Score: ";
+export const SCORE_MESSAGE_TEXT = "Score:";
 
 // vertical hole (distance between top and bottom pipe) sizes
 export const HOLE_SIZE = [

@@ -3,6 +3,7 @@ import {BirdComponent} from "../views/bird-component";
 import {PipeComponent} from "../views/pipe-component";
 
 import Phaser from "phaser";
+import {TextComponent} from "../views/text-component";
 
 export default class MainScene extends Phaser.Scene {
   gameState: number = constant.GAME_STATE.FINISH;
@@ -18,9 +19,9 @@ export default class MainScene extends Phaser.Scene {
   spacebarKey!: Phaser.Input.Keyboard.Key;
   escapeKey!: Phaser.Input.Keyboard.Key;
 
-  pauseMessage!: Phaser.GameObjects.Text;
-  finishMessage!: Phaser.GameObjects.Text;
-  scoreMessage!: Phaser.GameObjects.Text;
+  pauseMessage!: TextComponent;
+  finishMessage!: TextComponent;
+  scoreMessage!: TextComponent;
 
   counter: number = 0;
   counterSpeedUp: number = 1;
@@ -63,26 +64,25 @@ export default class MainScene extends Phaser.Scene {
     //this.input.keyboard.on('keydown-SPACE', birdFlap);
     //this.input.on('pointerdown', birdFlap);
 
-    this.pauseMessage = this.add.text(
+    this.pauseMessage = new TextComponent(this,
         constant.GAME_WIDTH / 5,
         constant.GAME_HEIGHT / 2 - 40,
         constant.PAUSE_MESSAGE_TEXT,
         constant.MESSAGE_STYLE
-    ).setDepth(2);
+    );
 
-    this.finishMessage = this.add.text(
+    this.finishMessage = new TextComponent(this,
         constant.GAME_WIDTH / 5,
         constant.GAME_HEIGHT / 2 - 40,
         constant.FINISH_MESSAGE_TEXT,
         constant.MESSAGE_STYLE
-    ).setDepth(2);
+    );
 
-    this.scoreMessage = this.add.text(
+    this.scoreMessage = new TextComponent(this,
         constant.GAME_WIDTH - constant.GAME_WIDTH / 6,
         30,
-        constant.SCORE_MESSAGE_TEXT + this.counter,
-        constant.SCORE_STYLE
-    ).setDepth(2);
+        `${constant.SCORE_MESSAGE_TEXT} ${this.counter}`,
+        constant.SCORE_STYLE);
 
     this.gameRestart();
   }
@@ -107,22 +107,22 @@ export default class MainScene extends Phaser.Scene {
     this.bird.setVelocityY(constant.FLAP_VELOCITY);
     //this.bird.setCollideWorldBounds(false);
 
-    this.scoreMessage.setVisible(false);
+    this.scoreMessage.hide();
 
-    this.finishMessage.setText(
-        "Your score: " + this.counter + "\n" + constant.FINISH_MESSAGE_TEXT
+    this.finishMessage.setNewText(
+        `Your score: ${this.counter}\n${constant.FINISH_MESSAGE_TEXT}`
     );
-    this.finishMessage.setVisible(true);
+    this.finishMessage.show();
   }
 
   gameRestart(): void {
-    this.finishMessage.setVisible(false);
+    this.finishMessage.hide();
 
     this.clearPipes();
 
     this.counter = 0;
-    this.scoreMessage.setText(constant.SCORE_MESSAGE_TEXT + this.counter);
-    this.scoreMessage.setVisible(true);
+    this.scoreMessage.setNewText(`${constant.SCORE_MESSAGE_TEXT} ${this.counter}`);
+    this.scoreMessage.show();
 
     this.counterSpeedUp = 1;
 
@@ -208,7 +208,7 @@ export default class MainScene extends Phaser.Scene {
     (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(constant.GRAVITY_ZERO);
     this.bird.setVelocityY(0);
 
-    this.pauseMessage.setVisible(true);
+    this.pauseMessage.show();
   }
 
   setPlay(): void {
@@ -216,7 +216,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.gameState = constant.GAME_STATE.PLAY;
 
-    this.pauseMessage.setVisible(false);
+    this.pauseMessage.hide();
 
     (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(constant.GRAVITY);
   }
@@ -255,7 +255,7 @@ export default class MainScene extends Phaser.Scene {
         // count the pipes pair that the bird has passed through
         if ((allPipesTop[i] as PipeComponent).isInCounterWindow(this.gameSpeed)) {
           this.counter++;
-          this.scoreMessage.setText(constant.SCORE_MESSAGE_TEXT + this.counter);
+          this.scoreMessage.setNewText(`${constant.SCORE_MESSAGE_TEXT} ${this.counter}`);
         }
 
         // speeding up every 10 gates
