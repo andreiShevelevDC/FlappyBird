@@ -9,6 +9,8 @@ export default class MainScene extends Phaser.Scene {
   gameState: number = constant.GAME_STATE.FINISH;
   gameSpeed: number = constant.GAME_WIDTH * constant.ACCELERATION;
 
+  back: Phaser.GameObjects.TileSprite[] = [];
+
   pipesTop!: Phaser.GameObjects.Group;
   pipesBottom!: Phaser.GameObjects.Group;
   bird!: BirdComponent;
@@ -31,7 +33,20 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(0, 0, "image_back").setOrigin(0, 0);
+    //this.add.image(0, 0, "image_back").setOrigin(0, 0);
+
+    let tileX: Phaser.GameObjects.TileSprite;
+    for(let i = 0; i < 3; i++) {
+      tileX = new Phaser.GameObjects.TileSprite(this, i * 288,0, 288, 512, constant.TEXTURES, "bg.png").setScale(2)
+      this.add.existing(tileX);
+      this.back[i] = tileX;
+    }
+    // this.back.add(new Phaser.GameObjects.TileSprite(this, 0,0, 288, 512, constant.TEXTURES, "bg.png").setScale(2));
+    // this.back.add(new Phaser.GameObjects.TileSprite(this, 288,0, 288, 512, constant.TEXTURES, "bg.png").setScale(2));
+    // this.back.add(new Phaser.GameObjects.TileSprite(this, 576,0, 288, 512, constant.TEXTURES, "bg.png").setScale(2));
+    //this.add.tileSprite(288, 0, 288, 512, constant.TEXTURES, "bg.png").setScale(2);
+    //this.add.tileSprite(576, 0, 288, 512, constant.TEXTURES, "bg.png").setScale(2);
+    //this.back.setTilePosition(90);
 
     this.pipesTop = this.physics.add.staticGroup();
     this.pipesBottom = this.physics.add.staticGroup();
@@ -243,6 +258,11 @@ export default class MainScene extends Phaser.Scene {
     if (this.gameState === constant.GAME_STATE.PLAY) {
 
       if(this.bird.isOutOfScreen()) this.finishGame();
+
+      //this.back.tilePositionX += this.gameSpeed;
+      this.back.forEach(tile => {
+        tile.tilePositionX += this.gameSpeed;
+      });
 
       let allPipesTop: Phaser.GameObjects.GameObject[] = this.pipesTop.getChildren();
       let allPipesBottom: Phaser.GameObjects.GameObject[] = this.pipesBottom.getChildren();

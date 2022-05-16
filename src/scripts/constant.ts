@@ -9,22 +9,14 @@ export enum GAME_STATE {
   FINISH
 }
 
+export const TEXTURES = "mainAtlas";
+
 export const SPRITESHEET_BIRD = "spritesheet_bird";
 
 export const BIRD_POS_X = GAME_WIDTH / 4;
 export const BIRD_POS_Y = GAME_HEIGHT / 2 - 100;
 
-export const BIRD_SCALE = 2;
-
-// export const BIRD_ANIMATION: Phaser.Types.Animations.Animation = {
-//   key: "flap",
-//   frames: anims.generateFrameNumbers(SPRITESHEET_BIRD, {
-//     start: 0,
-//     end: 3,
-//   }),
-//   frameRate: 10,
-//   repeat: 1,
-// }
+export const BIRD_SCALE = 1.35;
 
 // starting pipes horizontal shift speed per update call
 export const ACCELERATION = 0.003;

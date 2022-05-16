@@ -16,7 +16,7 @@ export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
       key: "flap",
       frames: this.anims.generateFrameNumbers(constant.SPRITESHEET_BIRD, {
         start: 0,
-        end: 3,
+        end: 2,
       }),
       frameRate: 10,
       repeat: 1,
