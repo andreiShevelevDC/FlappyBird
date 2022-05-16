@@ -15,7 +15,6 @@ export class PipeComponent extends Phaser.Physics.Arcade.Sprite {
 
   // only RTL
   move(gameSpeed: number): void {
-
     this.x -= gameSpeed;
     this.refreshBody();
   }

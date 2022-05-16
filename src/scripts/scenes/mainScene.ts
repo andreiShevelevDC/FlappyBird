@@ -12,6 +12,9 @@ export default class MainScene extends Phaser.Scene {
   pipesBottom!: Phaser.GameObjects.Group;
   bird!: BirdComponent;
 
+  overlapTop: Phaser.Physics.Arcade.Collider;
+  overlapBottom: Phaser.Physics.Arcade.Collider;
+
   spacebarKey!: Phaser.Input.Keyboard.Key;
   escapeKey!: Phaser.Input.Keyboard.Key;
 
@@ -35,15 +38,15 @@ export default class MainScene extends Phaser.Scene {
     this.bird = new BirdComponent(this);
     //this.makeBird(this.physics, this.anims);
 
-    //this.physics.add.collider(bird, pipes, birdCollide, null, this);
-    this.physics.add.overlap(
-        this.bird,
+    //this.physics.add.collider(this.bird, this.pipesTop, this.birdOverlap, undefined, this);
+    this.overlapTop = this.physics.add.overlap(
+        this.bird,// as Phaser.GameObjects.GameObject,
         this.pipesTop,
         this.birdOverlap,
         undefined,
         this
     );
-    this.physics.add.overlap(
+    this.overlapBottom = this.physics.add.overlap(
         this.bird,
         this.pipesBottom,
         this.birdOverlap,
@@ -96,7 +99,7 @@ export default class MainScene extends Phaser.Scene {
   // game finished!
   birdOverlap(): void {
     //setPause();
-    //console.log("Overlap");
+    console.log("Overlap");
 
     this.gameState = constant.GAME_STATE.FINISH;
 
