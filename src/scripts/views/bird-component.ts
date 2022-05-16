@@ -26,4 +26,8 @@ export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
     //this.setCollideWorldBounds(true);
     this.setPosition(constant.BIRD_POS_X, constant.BIRD_POS_Y);
   }
+
+  // death
+  isOutOfScreen = (): boolean =>
+    (this.y < 0 || this.y > constant.GAME_HEIGHT);
 }

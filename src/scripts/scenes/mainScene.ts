@@ -42,14 +42,14 @@ export default class MainScene extends Phaser.Scene {
     this.overlapTop = this.physics.add.overlap(
         this.bird,// as Phaser.GameObjects.GameObject,
         this.pipesTop,
-        this.birdOverlap,
+        this.finishGame,
         undefined,
         this
     );
     this.overlapBottom = this.physics.add.overlap(
         this.bird,
         this.pipesBottom,
-        this.birdOverlap,
+        this.finishGame,
         undefined,
         this
     );
@@ -97,7 +97,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   // game finished!
-  birdOverlap(): void {
+  finishGame(): void {
     //setPause();
     //console.log("Overlap");
 
@@ -241,6 +241,9 @@ export default class MainScene extends Phaser.Scene {
     this.pollKeyboard();
 
     if (this.gameState === constant.GAME_STATE.PLAY) {
+
+      if(this.bird.isOutOfScreen()) this.finishGame();
+
       let allPipesTop: Phaser.GameObjects.GameObject[] = this.pipesTop.getChildren();
       let allPipesBottom: Phaser.GameObjects.GameObject[] = this.pipesBottom.getChildren();
 
