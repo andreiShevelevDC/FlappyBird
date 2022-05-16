@@ -68,21 +68,21 @@ export default class MainScene extends Phaser.Scene {
         constant.GAME_HEIGHT / 2 - 40,
         constant.PAUSE_MESSAGE_TEXT,
         constant.MESSAGE_STYLE
-    );
+    ).setDepth(2);
 
     this.finishMessage = this.add.text(
         constant.GAME_WIDTH / 5,
         constant.GAME_HEIGHT / 2 - 40,
         constant.FINISH_MESSAGE_TEXT,
         constant.MESSAGE_STYLE
-    );
+    ).setDepth(2);
 
     this.scoreMessage = this.add.text(
         constant.GAME_WIDTH - constant.GAME_WIDTH / 6,
         30,
         constant.SCORE_MESSAGE_TEXT + this.counter,
         constant.SCORE_STYLE
-    );
+    ).setDepth(2);
 
     this.gameRestart();
   }

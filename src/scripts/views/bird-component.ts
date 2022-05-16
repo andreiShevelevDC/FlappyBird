@@ -9,7 +9,8 @@ export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this)
       .setScale(constant.BIRD_SCALE)
       .setBounce(0.2)
-      .setCollideWorldBounds(false);
+      .setCollideWorldBounds(false)
+      .setDepth(1);
 
     this.anims.create({
       key: "flap",
