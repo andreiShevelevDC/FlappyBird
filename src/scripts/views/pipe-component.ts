@@ -10,7 +10,7 @@ export class PipeComponent extends Phaser.Physics.Arcade.Sprite {
     super(scene, constant.GAME_WIDTH + constant.PIPE_WIDTH / 2, y, image_name);
 
     scene.add.existing(this);
-    scene.physics.add.existing(this);
+    //scene.physics.add.existing(this);
   }
 
   // only RTL

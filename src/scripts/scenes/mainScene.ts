@@ -99,7 +99,7 @@ export default class MainScene extends Phaser.Scene {
   // game finished!
   birdOverlap(): void {
     //setPause();
-    console.log("Overlap");
+    //console.log("Overlap");
 
     this.gameState = constant.GAME_STATE.FINISH;
 
@@ -248,6 +248,7 @@ export default class MainScene extends Phaser.Scene {
         (allPipesTop[i] as PipeComponent).move(this.gameSpeed);
         (allPipesBottom[i] as PipeComponent).move(this.gameSpeed);
 
+
         // count the pipes pair that the bird has passed through
         if ((allPipesTop[i] as PipeComponent).isInCounterWindow(this.gameSpeed)) {
           this.counter++;
@@ -271,8 +272,6 @@ export default class MainScene extends Phaser.Scene {
         )
           this.addPipes();
       }
-
-      //console.log(allPipesTop.length);
 
       // destroys the first pair of pipes if it moved out of screen
       if (
