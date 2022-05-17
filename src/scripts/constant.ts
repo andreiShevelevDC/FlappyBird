@@ -32,15 +32,15 @@ export const PIPE_GAP_STEP = GAME_WIDTH / PIPE_NUM;
 export const HOLE_GAP_STEP = GAME_HEIGHT / PIPE_NUM;
 
 export const MESSAGE_STYLE = {
-  font: "32px Courier",
+  font: "24px Courier",
   fill: "#ff0000",
   align: "center",
 };
 export const PAUSE_MESSAGE_TEXT = "Press SPACE to play\n\nESCAPE to pause";
-export const FINISH_MESSAGE_TEXT = "Game Finished!\n\nPress SPACE to restart";
+export const FINISH_MESSAGE_TEXT = "Game Finished!\n\nPress SPACE\nto restart";
 
 export const SCORE_STYLE = {
-  font: "24px Courier",
+  font: "20px Courier",
   fontStyle: "strong",
   fill: "#00ff00",
   align: "right",

@@ -7,7 +7,7 @@ export class PipeComponent extends Phaser.Physics.Arcade.Sprite {
   static PIPE_HEIGHT = 320;
 
   constructor(scene: Phaser.Scene, isTop:boolean, y: number) {
-    let image_name: any;
+    let image_name: string;
     if(isTop) image_name = constant.IMAGE_PIPE;
     else image_name = constant.IMAGE_PIPE_BOTTOM;
 

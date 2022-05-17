@@ -31,4 +31,12 @@ export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
   // death
   isOutOfScreen = (): boolean =>
     (this.y < 0 || this.y > constant.GAME_HEIGHT);
+
+  show(): void {
+    this.setVisible(true);
+  }
+
+  hide(): void {
+    this.setVisible(false);
+  }
 }

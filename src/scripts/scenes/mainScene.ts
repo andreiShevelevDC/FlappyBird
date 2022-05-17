@@ -3,6 +3,7 @@ import * as constant from './../constant'
 import {BirdComponent} from "../views/bird-component";
 import {PipeComponent} from "../views/pipe-component";
 import {TextComponent} from "../views/text-component";
+import {MessageComponent} from "../views/message-component";
 import {Background} from "../views/background";
 
 export default class MainScene extends Phaser.Scene {
@@ -21,7 +22,7 @@ export default class MainScene extends Phaser.Scene {
   spacebarKey!: Phaser.Input.Keyboard.Key;
   escapeKey!: Phaser.Input.Keyboard.Key;
 
-  pauseMessage!: TextComponent;
+  pauseMessage!: MessageComponent;
   finishMessage!: TextComponent;
   scoreMessage!: TextComponent;
 
@@ -33,7 +34,6 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
-    //this.add.image(0, 0, "image_back").setOrigin(0, 0);
     this.back = new Background(this);
 
     this.pipesTop = this.physics.add.staticGroup();
@@ -67,23 +67,25 @@ export default class MainScene extends Phaser.Scene {
     //this.input.keyboard.on('keydown-SPACE', birdFlap);
     //this.input.on('pointerdown', birdFlap);
 
-    this.pauseMessage = new TextComponent(this,
-        constant.GAME_WIDTH / 5,
-        constant.GAME_HEIGHT / 2 - 40,
-        constant.PAUSE_MESSAGE_TEXT,
-        constant.MESSAGE_STYLE
-    );
+    // this.pauseMessage = new TextComponent(this,
+    //     constant.GAME_WIDTH / 5,
+    //     constant.GAME_HEIGHT / 2 - 40,
+    //     constant.PAUSE_MESSAGE_TEXT,
+    //     constant.MESSAGE_STYLE
+    // );
+    //MessageComponent.showImagesAndNames(this);
+    this.pauseMessage = new MessageComponent(this, "message.png");
 
     this.finishMessage = new TextComponent(this,
-        constant.GAME_WIDTH / 5,
-        constant.GAME_HEIGHT / 2 - 40,
+        "center",
+        "center",
         constant.FINISH_MESSAGE_TEXT,
         constant.MESSAGE_STYLE
     );
 
     this.scoreMessage = new TextComponent(this,
-        constant.GAME_WIDTH - constant.GAME_WIDTH / 6,
-        30,
+        constant.GAME_WIDTH - constant.GAME_WIDTH / 5,
+        25,
         `${constant.SCORE_MESSAGE_TEXT} ${this.counter}`,
         constant.SCORE_STYLE);
 
@@ -208,6 +210,7 @@ export default class MainScene extends Phaser.Scene {
     this.gameState = constant.GAME_STATE.PAUSE;
     //GAME.scene.pause('default');
 
+    this.bird.hide();
     (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(constant.GRAVITY_ZERO);
     this.bird.setVelocityY(0);
 
@@ -222,6 +225,7 @@ export default class MainScene extends Phaser.Scene {
     this.pauseMessage.hide();
 
     (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(constant.GRAVITY);
+    this.bird.show();
   }
 
   pollKeyboard(): void {
