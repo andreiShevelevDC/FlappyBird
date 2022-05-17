@@ -1,7 +1,7 @@
 //import Phaser from "phaser";
 
-export const GAME_WIDTH = 800;
-export const GAME_HEIGHT = 600;
+export const GAME_WIDTH = 288;
+export const GAME_HEIGHT = 512;
 
 export enum GAME_STATE {
   PLAY,
@@ -16,7 +16,7 @@ export const SPRITESHEET_BIRD = "spritesheet_bird";
 export const BIRD_POS_X = GAME_WIDTH / 4;
 export const BIRD_POS_Y = GAME_HEIGHT / 2 - 100;
 
-export const BIRD_SCALE = 1.35;
+export const BIRD_SCALE = 1;//1.35;
 
 // starting pipes horizontal shift speed per update call
 export const ACCELERATION = 0.003;
@@ -24,14 +24,10 @@ export const GRAVITY = 400;
 export const GRAVITY_ZERO = 0;
 export const FLAP_VELOCITY = 250;
 
-export const IMAGE_PIPE = "image_pipe";
-export const IMAGE_PIPE_BOTTOM = "image_pipe_bottom";
+export const IMAGE_PIPE = "pipe-2.png";
+export const IMAGE_PIPE_BOTTOM = "pipe-1.png";
 
-// TODO: can I get sizes from image itself?
-export const PIPE_WIDTH = 60;
-export const PIPE_HEIGHT = 530;
-
-export const PIPE_NUM = 3.2;
+export const PIPE_NUM = 1.5;//3.2;
 export const PIPE_GAP_STEP = GAME_WIDTH / PIPE_NUM;
 export const HOLE_GAP_STEP = GAME_HEIGHT / PIPE_NUM;
 

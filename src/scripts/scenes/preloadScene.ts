@@ -1,4 +1,4 @@
-import {IMAGE_PIPE, IMAGE_PIPE_BOTTOM, TEXTURES, SPRITESHEET_BIRD} from "../constant";
+import {TEXTURES, SPRITESHEET_BIRD} from "../constant";
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -6,9 +6,8 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("image_back", "assets/back.png");
-    this.load.image(IMAGE_PIPE, "assets/pipe.png");
-    this.load.image(IMAGE_PIPE_BOTTOM, "assets/pipe_bottom.png");
+    //this.load.image("image_back", "assets/back.png");
+
     this.load.atlas(TEXTURES, "../assets/main.png", "../assets/main.json");
 
     this.load.spritesheet(SPRITESHEET_BIRD, "assets/bird.png", {
