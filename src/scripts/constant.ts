@@ -27,7 +27,7 @@ export const BIRD_POS_Y = GAME_HEIGHT / 2 - 100;
 export const BIRD_SCALE = 1;//1.35;
 
 // starting pipes horizontal shift speed per update call
-export const ACCELERATION = 0.004;
+export const ACCELERATION = 0.005;
 export const GRAVITY = 400;
 export const GRAVITY_ZERO = 0;
 export const FLAP_VELOCITY = 200;

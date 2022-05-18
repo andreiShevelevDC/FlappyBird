@@ -5,7 +5,7 @@ import {PipeComponent} from "../views/pipe-component";
 // import {TextComponent} from "../views/text-component";
 // import {MessageComponent} from "../views/message-component";
 import {Background} from "../views/background";
-import {UI} from "../views/UI";
+import {HUD} from "../views/HUD";
 
 export default class MainScene extends Phaser.Scene {
   gameState: number = constant.GAME_STATE.FINISH;
@@ -23,7 +23,7 @@ export default class MainScene extends Phaser.Scene {
   spacebarKey!: Phaser.Input.Keyboard.Key;
   escapeKey!: Phaser.Input.Keyboard.Key;
 
-  ui!: UI;
+  hud!: HUD;
 
   counter: number = 0;
   counterSpeedUpStep: number = 1;
@@ -56,7 +56,7 @@ export default class MainScene extends Phaser.Scene {
         this
     );
 
-    this.ui = new UI(this);
+    this.hud = new HUD(this);
     this.gameRestart();
     this.setupUserEventsHandling();
     this.setPause();
@@ -81,7 +81,7 @@ export default class MainScene extends Phaser.Scene {
       this.bird.setVelocityY(constant.FLAP_VELOCITY);
       //this.bird.setCollideWorldBounds(false);
 
-      this.ui.finishGame();
+      this.hud.finishGame();
     }
   }
 
@@ -170,7 +170,7 @@ export default class MainScene extends Phaser.Scene {
     (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(constant.GRAVITY_ZERO);
     this.bird.setVelocityY(0);
 
-    this.ui.pauseGame();
+    this.hud.pauseGame();
   }
 
   setPlay(): void {
@@ -180,7 +180,7 @@ export default class MainScene extends Phaser.Scene {
 
     (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(constant.GRAVITY);
     this.bird.show();
-    this.ui.playGame();
+    this.hud.playGame();
   }
 
   setupUserEventsHandling() {
@@ -249,7 +249,7 @@ export default class MainScene extends Phaser.Scene {
         // count the pipes pair that the bird has passed through
         if ((allPipesTop[i] as PipeComponent).isInCounterWindow(this.gameSpeed)) {
           this.counter++;
-          this.ui.updateScore();
+          this.hud.updateScore();
         }
 
         // speeding up every 10 gates

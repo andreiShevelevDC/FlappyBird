@@ -4,7 +4,7 @@
 
 import * as constant from "./../constant";
 
-export class UI extends Phaser.GameObjects.Container {
+export class HUD extends Phaser.GameObjects.Container {
 
     private score: number = 0;
 
