@@ -12,9 +12,9 @@ export enum GAME_STATE {
 export enum ENTITIES_DEPTH {
   BACKGROUND = 0,
   BIRD = 1,
-  BASE = 2,
+  BASE = 3,
   PIPES = 2,
-  UI = 3
+  UI = 4
 }
 
 export const TEXTURES = "mainAtlas";
@@ -68,5 +68,5 @@ export const HOLE_SIZE = [
 // hole sizes (index from HOLE_SIZE)
 // number of repetitions of each value affects probability of appearing
 export const HOLE_DIFFICULTY = [
-  0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4
+  1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4
 ];

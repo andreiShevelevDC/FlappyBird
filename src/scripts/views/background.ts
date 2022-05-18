@@ -26,11 +26,11 @@ export class Background {
 
         let base_tile: Phaser.GameObjects.TileSprite;
         let basesNum: number = Math.ceil(constant.GAME_WIDTH / this.BASE_WIDTH);
-        console.log(basesNum);
+        if(basesNum === 1) basesNum++;
 
         for(let i = 0; i < basesNum; i++) {
             base_tile = new Phaser.GameObjects.TileSprite(scene,
-                i * this.BASE_WIDTH, 512 - this.BASE_HEIGHT,
+                i * this.BASE_WIDTH, 512 - this.BASE_HEIGHT + 100, // Why 100?
                 this.BASE_WIDTH, this.BASE_HEIGHT,
                 constant.TEXTURES, "base.png")
                 //.setScale(2)
@@ -48,8 +48,8 @@ export class Background {
         // });
         let reps = this.back.length > this.base.length ? this.back.length : this.base.length;
         for(let i = 0; i <= reps; i++) {
-            if(this.back[i] !== undefined) this.back[i].tilePositionX -= gameSpeed / 3;
-            if(this.base[i] !== undefined) this.base[i].tilePositionX -= gameSpeed;
+            if(this.back[i] !== undefined) this.back[i].tilePositionX -= gameSpeed / 10;
+            if(this.base[i] !== undefined) this.base[i].tilePositionX -= gameSpeed / 4;
         }
     }
 

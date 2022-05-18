@@ -109,7 +109,7 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
-  prevHoleCenter: number = constant.GAME_HEIGHT / 2;
+  prevHoleCenter: number = (constant.GAME_HEIGHT - 50) / 2;
 
   addPipes(): void {
     // clamps center of the hole to fit it whole on the screen
