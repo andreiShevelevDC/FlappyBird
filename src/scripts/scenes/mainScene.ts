@@ -1,4 +1,3 @@
-import Phaser from "phaser";
 import * as constant from './../constant'
 import {BirdComponent} from "../views/bird-component";
 import {PipeComponent} from "../views/pipe-component";

@@ -26,14 +26,15 @@ export class Background {
 
         let base_tile: Phaser.GameObjects.TileSprite;
         let basesNum: number = Math.ceil(constant.GAME_WIDTH / this.BASE_WIDTH);
+        console.log(basesNum);
 
         for(let i = 0; i < basesNum; i++) {
             base_tile = new Phaser.GameObjects.TileSprite(scene,
-                i * this.BASE_WIDTH, constant.GAME_HEIGHT - this.BASE_HEIGHT,
+                i * this.BASE_WIDTH, 512 - this.BASE_HEIGHT,
                 this.BASE_WIDTH, this.BASE_HEIGHT,
                 constant.TEXTURES, "base.png")
-                .setScale(2)
-                .setDepth(constant.ENTITIES_DEPTH.BACKGROUND);
+                //.setScale(2)
+                .setDepth(constant.ENTITIES_DEPTH.BASE);
 
             scene.add.existing(base_tile);
             this.base[i] = base_tile;

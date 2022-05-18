@@ -46,7 +46,7 @@ export const FINISH_MESSAGE_STYLE = {
 };
 export const PAUSE_MESSAGE_TEXT = "Press SPACE to play\n\nESCAPE to pause";
 export const FINISH_SCORE_TEXT = "Your score:";
-export const FINISH_RESTART_TEXT = "Click or Press SPACE\nto restart";
+export const FINISH_RESTART_TEXT = "Click or press SPACE\nto restart";
 
 export const SCORE_STYLE = {
   font: "16px Verdana",
