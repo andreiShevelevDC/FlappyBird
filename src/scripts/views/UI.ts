@@ -10,6 +10,7 @@ export class UI extends Phaser.GameObjects.Container {
 
     private scoreMessage!: Phaser.GameObjects.Text;
     private startImage!: Phaser.GameObjects.Image;
+
     private finishBack!: Phaser.GameObjects.Image;
     private finishImage!: Phaser.GameObjects.Image;
     private finishScoreMessage!: Phaser.GameObjects.Text;
@@ -26,10 +27,10 @@ export class UI extends Phaser.GameObjects.Container {
 
         this.scoreMessage = new Phaser.GameObjects.Text(scene,
             0, 0,
-            `${constant.SCORE_MESSAGE_TEXT} 0`, constant.SCORE_STYLE);
+            "", constant.SCORE_STYLE);
         this.scoreMessage.setDepth(constant.ENTITIES_DEPTH.UI)
             .setOrigin(0.5, 0.5)
-            .setPosition(constant.GAME_WIDTH - constant.GAME_WIDTH / 5, 25)
+            .setPosition(constant.GAME_WIDTH - constant.GAME_WIDTH / 5, 20)
         scene.add.existing(this.scoreMessage);
 
         this.startImage = new Phaser.GameObjects.Image(scene, 0, 0, constant.TEXTURES, "message.png");
@@ -47,29 +48,38 @@ export class UI extends Phaser.GameObjects.Container {
         this.finishImage = new Phaser.GameObjects.Image(scene, 0, 0, constant.TEXTURES, "gameover.png");
         this.finishImage.setDepth(constant.ENTITIES_DEPTH.UI)
             .setOrigin(0.5, 0.5)
-            .setPosition(constant.GAME_WIDTH / 2, constant.GAME_HEIGHT / 2 - 200);
+            .setPosition(constant.GAME_WIDTH / 2, constant.GAME_HEIGHT / 2 - 40);
         scene.add.existing(this.finishImage);
 
         this.finishScoreMessage = new Phaser.GameObjects.Text(scene,
             0, 0,
-            "", constant.MESSAGE_STYLE);
+            "", constant.FINISH_MESSAGE_STYLE);
         this.finishScoreMessage.setDepth(constant.ENTITIES_DEPTH.UI)
             .setOrigin(0.5, 0.5)
-            .setPosition(constant.GAME_WIDTH / 2, constant.GAME_HEIGHT / 2);
+            .setPosition(constant.GAME_WIDTH / 2, constant.GAME_HEIGHT / 2 + 10);
         scene.add.existing(this.finishScoreMessage);
 
         this.finishRestartMessage = new Phaser.GameObjects.Text(scene,
             0, 0,
-            constant.FINISH_RESTART_TEXT, constant.MESSAGE_STYLE);
+            constant.FINISH_RESTART_TEXT, constant.FINISH_MESSAGE_STYLE);
         this.finishRestartMessage.setDepth(constant.ENTITIES_DEPTH.UI)
             .setOrigin(0.5, 0.5)
-            .setPosition(constant.GAME_WIDTH / 2, constant.GAME_HEIGHT / 2 + 100);
+            .setPosition(constant.GAME_WIDTH / 2, constant.GAME_HEIGHT / 2 + 50);
         scene.add.existing(this.finishRestartMessage);
+
+        scene.tweens.add({
+            targets: this.finishRestartMessage,
+            alpha: 0.6,
+            duration: 1000,
+            ease: "SineInOut",
+            yoyo: true,
+            repeat: -1,
+        });
     }
 
     updateScore() {
         this.score++;
-        this.scoreMessage.setText(`${constant.SCORE_MESSAGE_TEXT} ${this.score}`);
+        this.scoreMessage.setText(`${constant.SCORE_MESSAGE_TEXT} ${this.score.toString().padStart(3, "0")}`);
     }
 
     pauseGame() {
@@ -78,6 +88,7 @@ export class UI extends Phaser.GameObjects.Container {
         this.finishScoreMessage.setVisible(false);
         this.finishRestartMessage.setVisible(false);
 
+        this.scoreMessage.setText(`${constant.SCORE_MESSAGE_TEXT} ${this.score.toString().padStart(3, "0")}`);
         this.scoreMessage.setVisible(true);
         this.startImage.setVisible(true);
     }
@@ -93,7 +104,7 @@ export class UI extends Phaser.GameObjects.Container {
 
         this.finishBack.setVisible(true);
         this.finishImage.setVisible(true);
-        this.finishScoreMessage.setText(`${constant.FINISH_SCORE_TEXT} ${this.score}`);
+        this.finishScoreMessage.setText(`${constant.FINISH_SCORE_TEXT} ${this.score.toString().padStart(3, "0")}`);
         this.finishScoreMessage.setVisible(true);
         this.finishRestartMessage.setVisible(true);
 

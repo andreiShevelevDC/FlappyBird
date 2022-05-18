@@ -42,7 +42,7 @@ export class MessageComponent extends Phaser.GameObjects.Sprite {
                 .on("pointerdown", () => onClick());
             scene.add.existing(currSprite);
 
-            spriteName = new Phaser.GameObjects.Text(scene, 0, 0, imageList[index], constant.MESSAGE_STYLE);
+            spriteName = new Phaser.GameObjects.Text(scene, 0, 0, imageList[index], constant.FINISH_MESSAGE_STYLE);
             spriteName.setDepth(4)
                 .setOrigin(0.5, 0.5)
                 .setPosition(constant.GAME_WIDTH / 2, 100);

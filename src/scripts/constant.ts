@@ -39,19 +39,19 @@ export const PIPE_NUM = 1.5;//3.2;
 export const PIPE_GAP_STEP = GAME_WIDTH / PIPE_NUM;
 export const HOLE_GAP_STEP = GAME_HEIGHT / PIPE_NUM;
 
-export const MESSAGE_STYLE = {
-  font: "24px Courier",
-  fill: "#ff0000",
+export const FINISH_MESSAGE_STYLE = {
+  font: "18px Verdana",
+  fill: "#fff",
   align: "center",
 };
 export const PAUSE_MESSAGE_TEXT = "Press SPACE to play\n\nESCAPE to pause";
 export const FINISH_SCORE_TEXT = "Your score:";
-export const FINISH_RESTART_TEXT = "Press SPACE\nto restart";
+export const FINISH_RESTART_TEXT = "Click or Press SPACE\nto restart";
 
 export const SCORE_STYLE = {
-  font: "20px Courier",
+  font: "16px Verdana",
   fontStyle: "strong",
-  fill: "#00ff00",
+  fill: "#ff0000",
   align: "right",
 };
 export const SCORE_MESSAGE_TEXT = "Score:";
