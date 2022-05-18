@@ -9,6 +9,14 @@ export enum GAME_STATE {
   FINISH
 }
 
+export enum ENTITIES_DEPTH {
+  BACKGROUND = 0,
+  BIRD = 1,
+  BASE = 2,
+  PIPES = 2,
+  UI = 3
+}
+
 export const TEXTURES = "mainAtlas";
 
 export const SPRITESHEET_BIRD = "spritesheet_bird";
@@ -37,7 +45,8 @@ export const MESSAGE_STYLE = {
   align: "center",
 };
 export const PAUSE_MESSAGE_TEXT = "Press SPACE to play\n\nESCAPE to pause";
-export const FINISH_MESSAGE_TEXT = "Game Finished!\n\nPress SPACE\nto restart";
+export const FINISH_SCORE_TEXT = "Your score:";
+export const FINISH_RESTART_TEXT = "Press SPACE\nto restart";
 
 export const SCORE_STYLE = {
   font: "20px Courier",

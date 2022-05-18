@@ -5,12 +5,13 @@ import {PipeComponent} from "../views/pipe-component";
 import {TextComponent} from "../views/text-component";
 import {MessageComponent} from "../views/message-component";
 import {Background} from "../views/background";
+import {UI} from "../views/UI";
 
 export default class MainScene extends Phaser.Scene {
   gameState: number = constant.GAME_STATE.FINISH;
   gameSpeed: number = constant.GAME_WIDTH * constant.ACCELERATION;
 
-  back: Background;//Phaser.GameObjects.TileSprite[] = [];
+  back: Background;
 
   pipesTop!: Phaser.GameObjects.Group;
   pipesBottom!: Phaser.GameObjects.Group;
@@ -40,7 +41,6 @@ export default class MainScene extends Phaser.Scene {
     this.pipesBottom = this.physics.add.staticGroup();
 
     this.bird = new BirdComponent(this);
-    //this.makeBird(this.physics, this.anims);
 
     //this.physics.add.collider(this.bird, this.pipesTop, this.birdOverlap, undefined, this);
     this.overlapTop = this.physics.add.overlap(

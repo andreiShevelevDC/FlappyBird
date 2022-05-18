@@ -1,4 +1,3 @@
-import Phaser from "phaser";
 import * as constant from "../constant";
 
 export class Background {
@@ -14,7 +13,9 @@ export class Background {
 
         for(let i = 0; i < tilesNum; i++) {
             tileX = new Phaser.GameObjects.TileSprite(scene, i * this.TILE_WIDTH,0, this.TILE_WIDTH,
-                512, constant.TEXTURES, "bg.png").setScale(2);
+                512, constant.TEXTURES, "bg.png")
+                .setScale(2)
+                .setDepth(constant.ENTITIES_DEPTH.BACKGROUND);
 
             scene.add.existing(tileX);
             this.back[i] = tileX;

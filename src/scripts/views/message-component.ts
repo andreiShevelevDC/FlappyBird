@@ -2,7 +2,6 @@
 // in the center of the screen
 
 import * as constant from "./../constant";
-import Phaser from "phaser";
 
 export class MessageComponent extends Phaser.GameObjects.Sprite {
 
