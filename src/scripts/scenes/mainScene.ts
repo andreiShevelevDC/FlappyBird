@@ -58,21 +58,6 @@ export default class MainScene extends Phaser.Scene {
         this
     );
 
-    this.spacebarKey = this.input.keyboard.addKey(
-        Phaser.Input.Keyboard.KeyCodes.SPACE
-    );
-    this.escapeKey = this.input.keyboard.addKey(
-        Phaser.Input.Keyboard.KeyCodes.ESC
-    );
-    //this.input.keyboard.on('keydown-SPACE', birdFlap);
-    //this.input.on('pointerdown', birdFlap);
-
-    // this.pauseMessage = new TextComponent(this,
-    //     constant.GAME_WIDTH / 5,
-    //     constant.GAME_HEIGHT / 2 - 40,
-    //     constant.PAUSE_MESSAGE_TEXT,
-    //     constant.MESSAGE_STYLE
-    // );
     //MessageComponent.showImagesAndNames(this);
     this.pauseMessage = new MessageComponent(this, "message.png");
 
@@ -90,6 +75,7 @@ export default class MainScene extends Phaser.Scene {
         constant.SCORE_STYLE);
 
     this.gameRestart();
+    this.setupUserEventsHandling();
   }
 
   birdFlap(): void {
@@ -155,11 +141,11 @@ export default class MainScene extends Phaser.Scene {
     // clamps center of the hole to fit it whole on the screen
     // while making it's not too different in position from previous hole
     const findCenter = (holeWidth: number): number => {
-      const RAND_Y = Math.random() * constant.GAME_HEIGHT;
+      const RAND_Y = Math.random() * constant.GAME_HEIGHT / 1.3;
 
       let center: number = Math.min(
           RAND_Y,
-          constant.GAME_HEIGHT - holeWidth / 2,
+          constant.GAME_HEIGHT / 1.3 - holeWidth / 2,
           this.prevHoleCenter + constant.HOLE_GAP_STEP
       );
       center = Math.max(
@@ -228,6 +214,23 @@ export default class MainScene extends Phaser.Scene {
     this.bird.show();
   }
 
+  setupUserEventsHandling() {
+    this.spacebarKey = this.input.keyboard.addKey(
+        Phaser.Input.Keyboard.KeyCodes.SPACE
+    );
+    this.escapeKey = this.input.keyboard.addKey(
+        Phaser.Input.Keyboard.KeyCodes.ESC
+    );
+    //this.input.keyboard.on('keydown-SPACE', birdFlap);
+    //this.input.on('pointerdown', birdFlap);
+
+
+    let backs = this.back.getBackground();
+    backs.forEach(bck =>
+        bck.setInteractive().on("pointerdown", () => this.onClick())
+    );
+  }
+
   pollKeyboard(): void {
     if (
         Phaser.Input.Keyboard.JustDown(this.escapeKey) &&
@@ -241,6 +244,20 @@ export default class MainScene extends Phaser.Scene {
         this.birdFlap();
         this.bird.anims.play("flap");
       } else this.gameRestart();
+    }
+  }
+
+  onClick() {
+    switch (this.gameState) {
+
+      case constant.GAME_STATE.PLAY:
+      case constant.GAME_STATE.PAUSE:
+        this.birdFlap();
+        this.bird.anims.play("flap");
+        break;
+
+      case constant.GAME_STATE.FINISH:
+        this.gameRestart();
     }
   }
 

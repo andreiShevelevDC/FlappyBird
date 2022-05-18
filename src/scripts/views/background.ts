@@ -5,7 +5,7 @@ export class Background {
 
     readonly TILE_WIDTH = 288;
 
-    protected back: Phaser.GameObjects.TileSprite[] = [];
+    private back: Phaser.GameObjects.TileSprite[] = [];
 
     constructor(scene: Phaser.Scene) {
 
@@ -15,11 +15,10 @@ export class Background {
         for(let i = 0; i < tilesNum; i++) {
             tileX = new Phaser.GameObjects.TileSprite(scene, i * this.TILE_WIDTH,0, this.TILE_WIDTH,
                 512, constant.TEXTURES, "bg.png").setScale(2);
+
             scene.add.existing(tileX);
             this.back[i] = tileX;
         }
-
-        //scene.add.existing(this);
     }
 
     // move background RTL
@@ -31,4 +30,6 @@ export class Background {
             this.back[i].tilePositionX -= gameSpeed / 3;
         }
     }
+
+    getBackground = (): Phaser.GameObjects.TileSprite[] => this.back;
 }
