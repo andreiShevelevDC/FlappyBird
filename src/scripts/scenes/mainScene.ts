@@ -1,8 +1,9 @@
-import * as constant from './../constant'
-import {BirdComponent} from "../views/bird-component";
-import {PipeComponent} from "../views/pipe-component";
-import {Background} from "../views/background";
-import {Hud} from "../views/hud";
+import * as constant from "./../constant";
+import { BirdComponent } from "../views/bird-component";
+import { PipeComponent } from "../views/pipe-component";
+import { Background } from "../views/background";
+import { Hud } from "../views/hud";
+import { Utility } from "../views/utility";
 
 export default class MainScene extends Phaser.Scene {
   gameState: number = constant.GAME_STATE.FINISH;
@@ -14,14 +15,14 @@ export default class MainScene extends Phaser.Scene {
   spacebarKey!: Phaser.Input.Keyboard.Key;
   escapeKey!: Phaser.Input.Keyboard.Key;
   hud!: Hud;
-  counter: number = 0;
-  counterSpeedUpStep: number = 1;
+  scoreSpeedUpStep: number = 1;
 
   constructor() {
-    super({ key: 'MainScene' })
+    super({ key: "MainScene" });
   }
 
   create() {
+    //new Utility(this);
     this.background = new Background(this);
     this.pipesTop = this.physics.add.staticGroup();
     this.pipesBottom = this.physics.add.staticGroup();
@@ -36,18 +37,18 @@ export default class MainScene extends Phaser.Scene {
   private createBirdPipesCollision(): void {
     //this.physics.add.collider(this.bird, this.pipesTop, this.birdOverlap, undefined, this);
     this.physics.add.overlap(
-        this.bird,
-        this.pipesTop,
-        this.finishGame,
-        undefined,
-        this
+      this.bird,
+      this.pipesTop,
+      this.finishGame,
+      undefined,
+      this
     );
     this.physics.add.overlap(
-        this.bird,
-        this.pipesBottom,
-        this.finishGame,
-        undefined,
-        this
+      this.bird,
+      this.pipesBottom,
+      this.finishGame,
+      undefined,
+      this
     );
   }
 
@@ -69,15 +70,17 @@ export default class MainScene extends Phaser.Scene {
 
   private resetGame(): void {
     this.clearPipesOnFinish();
-    this.counter = 0;
-    this.counterSpeedUpStep = 1;
+    this.scoreSpeedUpStep = 1;
     this.bird.resetPosition();
     this.addPipes();
+    this.setAsPaused();
   }
 
-  clearPipesOnFinish(): void {
-    let allPipesTop: Phaser.GameObjects.GameObject[] = this.pipesTop.getChildren();
-    let allPipesBottom: Phaser.GameObjects.GameObject[] = this.pipesBottom.getChildren();
+  private clearPipesOnFinish(): void {
+    let allPipesTop: Phaser.GameObjects.GameObject[] =
+      this.pipesTop.getChildren();
+    let allPipesBottom: Phaser.GameObjects.GameObject[] =
+      this.pipesBottom.getChildren();
     while (allPipesTop.length > 0) {
       this.pipesTop.remove(allPipesTop[0], true, true);
       this.pipesBottom.remove(allPipesBottom[0], true, true);
@@ -88,16 +91,16 @@ export default class MainScene extends Phaser.Scene {
   // while making it's not too different in position from previous hole
   private prevHoleCenter: number = (constant.GAME_HEIGHT - 50) / 2;
   private findHoleCenter = (holeWidth: number): number => {
-    const RAND_Y = Math.random() * constant.GAME_HEIGHT / 1.3;
+    const RAND_Y = (Math.random() * constant.GAME_HEIGHT) / 1.3;
     let center: number = Math.min(
-        RAND_Y,
-        constant.GAME_HEIGHT / 1.3 - holeWidth / 2,
-        this.prevHoleCenter + constant.HOLE_GAP_STEP
+      RAND_Y,
+      constant.GAME_HEIGHT / 1.3 - holeWidth / 2,
+      this.prevHoleCenter + constant.HOLE_GAP_STEP
     );
     center = Math.max(
-        center,
-        holeWidth / 2,
-        this.prevHoleCenter - constant.HOLE_GAP_STEP
+      center,
+      holeWidth / 2,
+      this.prevHoleCenter - constant.HOLE_GAP_STEP
     );
     return center;
   };
@@ -112,23 +115,38 @@ export default class MainScene extends Phaser.Scene {
     //     console.log(holeWidth, findHoleCenter(Math.random() * GAME_HEIGHT, holeWidth));
     //     a--;
     // }
-
     let holeWidth: number =
-        constant.HOLE_SIZE[constant.HOLE_DIFFICULTY[Math.floor(Math.random() * constant.HOLE_DIFFICULTY.length)]];
+      constant.HOLE_SIZE[
+        constant.HOLE_DIFFICULTY[
+          Math.floor(Math.random() * constant.HOLE_DIFFICULTY.length)
+        ]
+      ];
     let holeCenter = this.findHoleCenter(holeWidth);
     //console.log(holeCenter, " / ", holeWidth);
     this.prevHoleCenter = holeCenter;
-    this.pipesTop.add(new PipeComponent(this, true,
-        holeCenter - (holeWidth + PipeComponent.PIPE_HEIGHT) / 2));
-    this.pipesBottom.add(new PipeComponent(this, false,
-        holeCenter + (holeWidth + PipeComponent.PIPE_HEIGHT) / 2));
+    this.pipesTop.add(
+      new PipeComponent(
+        this,
+        true,
+        holeCenter - (holeWidth + PipeComponent.PIPE_HEIGHT) / 2
+      )
+    );
+    this.pipesBottom.add(
+      new PipeComponent(
+        this,
+        false,
+        holeCenter + (holeWidth + PipeComponent.PIPE_HEIGHT) / 2
+      )
+    );
   }
 
   private setAsPaused(): void {
     //console.log(" * Pause");
     this.gameState = constant.GAME_STATE.PAUSE;
     this.bird.hide();
-    (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(constant.GRAVITY_ZERO);
+    (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(
+      constant.GRAVITY_ZERO
+    );
     this.bird.setVelocityY(0);
     this.hud.pauseGame();
   }
@@ -136,30 +154,32 @@ export default class MainScene extends Phaser.Scene {
   private setPlay(): void {
     //console.log(" * Play");
     this.gameState = constant.GAME_STATE.PLAY;
-    (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(constant.GRAVITY);
+    (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(
+      constant.GRAVITY
+    );
     this.bird.show();
     this.hud.playGame();
   }
 
   private attachListeners(): void {
     this.spacebarKey = this.input.keyboard.addKey(
-        Phaser.Input.Keyboard.KeyCodes.SPACE
+      Phaser.Input.Keyboard.KeyCodes.SPACE
     );
     this.escapeKey = this.input.keyboard.addKey(
-        Phaser.Input.Keyboard.KeyCodes.ESC
+      Phaser.Input.Keyboard.KeyCodes.ESC
     );
     //this.input.keyboard.on('keydown-SPACE', birdFlap);
     //this.input.on('pointerdown', birdFlap);
     let backs = this.background.getBackground();
-    backs.forEach(bck =>
-        bck.setInteractive().on("pointerdown", () => this.onClick())
+    backs.forEach((bck) =>
+      bck.setInteractive().on("pointerdown", () => this.onClick())
     );
   }
 
   private pollKeyboard(): void {
     if (
-        Phaser.Input.Keyboard.JustDown(this.escapeKey) &&
-        this.gameState === constant.GAME_STATE.PLAY
+      Phaser.Input.Keyboard.JustDown(this.escapeKey) &&
+      this.gameState === constant.GAME_STATE.PLAY
     ) {
       this.setAsPaused();
     }
@@ -167,8 +187,7 @@ export default class MainScene extends Phaser.Scene {
       if (this.gameState !== constant.GAME_STATE.FINISH) {
         this.birdFlap();
         this.bird.anims.play("flap");
-      } else
-        this.resetGame();
+      } else this.resetGame();
     }
   }
 
@@ -184,26 +203,34 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
-  private countScore(): void {
-    if ((allPipesTop[i] as PipeComponent).isInCounterWindow(this.gameSpeed)) {
-      this.counter++;
+  private countScore(currPipe: PipeComponent): void {
+    if (currPipe.isInCounterWindow(this.gameSpeed)) {
       this.hud.updateScore();
     }
   }
 
-  // speeding up every 10 gates
+  // speeding up every number of score points/gates
   private speedGameUp(): void {
-    if (this.counter > this.counterSpeedUpStep && this.counter % 10 === 0) {
+    const SPEEDUP_THRESHOLD = 10;
+    let currScore: number = this.hud.getScore();
+    if (
+      currScore > this.scoreSpeedUpStep &&
+      currScore % SPEEDUP_THRESHOLD === 0
+    ) {
       this.gameSpeed += this.gameSpeed * constant.ACCELERATION * 50;
       //console.log(gameSpeed);
-      this.counterSpeedUpStep = this.counter;
+      this.scoreSpeedUpStep = currScore;
     }
   }
 
   private destroyInvisiblePipes(
-      allPipesTop: Phaser.GameObjects.GameObject[],
-      allPipesBottom: Phaser.GameObjects.GameObject[]): void {
-    if (allPipesTop.length !== 0 && ((allPipesTop[0] as PipeComponent).isOutOfWindow())) {
+    allPipesTop: Phaser.GameObjects.GameObject[],
+    allPipesBottom: Phaser.GameObjects.GameObject[]
+  ): void {
+    if (
+      allPipesTop.length !== 0 &&
+      (allPipesTop[0] as PipeComponent).isOutOfWindow()
+    ) {
       this.pipesTop.remove(allPipesTop[0], true, true);
       this.pipesBottom.remove(allPipesBottom[0], true, true);
     }
@@ -212,18 +239,23 @@ export default class MainScene extends Phaser.Scene {
   update() {
     this.pollKeyboard();
     if (this.gameState === constant.GAME_STATE.PLAY) {
-      if(this.bird.isOutOfScreen()) this.finishGame();
+      if (this.bird.isOutOfScreen()) this.finishGame();
       this.background.doParallax(this.gameSpeed);
-      let allPipesTop: Phaser.GameObjects.GameObject[] = this.pipesTop.getChildren();
-      let allPipesBottom: Phaser.GameObjects.GameObject[] = this.pipesBottom.getChildren();
+      let allPipesTop: Phaser.GameObjects.GameObject[] =
+        this.pipesTop.getChildren();
+      let allPipesBottom: Phaser.GameObjects.GameObject[] =
+        this.pipesBottom.getChildren();
       for (let i = 0; i < allPipesTop.length; i++) {
         (allPipesTop[i] as PipeComponent).move(this.gameSpeed);
         (allPipesBottom[i] as PipeComponent).move(this.gameSpeed);
-        this.countScore();
+        this.countScore(allPipesTop[i] as PipeComponent);
         // create a new pair of pipes,
         // if the last (newest) pair has moved more than PIPE_GAP_STEP
-        if (i === allPipesTop.length - 1 &&
-            (allPipesTop[i] as Phaser.Physics.Arcade.Sprite).x < constant.GAME_WIDTH - constant.PIPE_GAP_STEP)
+        if (
+          i === allPipesTop.length - 1 &&
+          (allPipesTop[i] as Phaser.Physics.Arcade.Sprite).x <
+            constant.GAME_WIDTH - constant.PIPE_GAP_STEP
+        )
           this.addPipes();
       }
       this.speedGameUp();

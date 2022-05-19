@@ -3,117 +3,111 @@
 // Finish game - popup.png, gameover.png. score - text, play again - text
 
 import * as constant from "./../constant";
+import { TextComponent } from "./text-component";
+import { ImageComponent } from "./image-component";
 
 export class Hud extends Phaser.GameObjects.Container {
+  private score: number = 0;
+  private scoreMessage!: TextComponent;
+  private startImage!: ImageComponent;
+  private finishBack!: ImageComponent;
+  private finishImage!: ImageComponent;
+  private finishScoreMessage!: TextComponent;
+  private finishRestartMessage!: TextComponent;
 
-    private score: number = 0;
-    private scoreMessage!: Phaser.GameObjects.Text;
-    private startImage!: Phaser.GameObjects.Image;
-    private finishBack!: Phaser.GameObjects.Image;
-    private finishImage!: Phaser.GameObjects.Image;
-    private finishScoreMessage!: Phaser.GameObjects.Text;
-    private finishRestartMessage!: Phaser.GameObjects.Text;
+  public constructor(public scene: Phaser.Scene) {
+    super(scene);
+    this.build(scene);
+    this.pauseGame();
+  }
 
-    constructor(public scene: Phaser.Scene) {
-        super(scene);
+  private build(scene): void {
+    this.scoreMessage = new TextComponent(
+      scene,
+      constant.GAME_WIDTH - constant.GAME_WIDTH / 5,
+      20,
+      "",
+      constant.SCORE_STYLE
+    );
+    this.startImage = new ImageComponent(
+      scene,
+      undefined,
+      undefined,
+      "message.png"
+    );
+    this.finishBack = new ImageComponent(
+      scene,
+      undefined,
+      undefined,
+      "popup.png"
+    );
+    this.finishImage = new ImageComponent(
+      scene,
+      undefined,
+      constant.GAME_HEIGHT / 2 - 40,
+      "gameover.png"
+    );
+    this.finishScoreMessage = new TextComponent(
+      scene,
+      undefined,
+      constant.GAME_HEIGHT / 2 + 10,
+      "",
+      constant.FINISH_MESSAGE_STYLE
+    );
+    this.finishRestartMessage = new TextComponent(
+      scene,
+      undefined,
+      constant.GAME_HEIGHT / 2 + 50,
+      constant.FINISH_RESTART_TEXT,
+      constant.FINISH_MESSAGE_STYLE
+    );
+    scene.tweens.add({
+      targets: this.finishRestartMessage,
+      alpha: 0.6,
+      duration: 1000,
+      ease: "SineInOut",
+      yoyo: true,
+      repeat: -1,
+    });
+  }
 
-        this.build(scene);
-        this.pauseGame();
-    }
+  public updateScore(): void {
+    this.score++;
+    this.scoreMessage.setText(
+      `${constant.SCORE_MESSAGE_TEXT} ${this.score.toString().padStart(3, "0")}`
+    );
+  }
 
-    private build(scene) {
+  private shouldShowFinishPopup(isShown: boolean): void {
+    this.finishBack.setVisible(isShown);
+    this.finishImage.setVisible(isShown);
+    this.finishScoreMessage.setVisible(isShown);
+    this.finishRestartMessage.setVisible(isShown);
+  }
 
-        this.scoreMessage = new Phaser.GameObjects.Text(scene,
-            0, 0,
-            "", constant.SCORE_STYLE);
-        this.scoreMessage.setDepth(constant.ENTITIES_DEPTH.UI)
-            .setOrigin(0.5, 0.5)
-            .setPosition(constant.GAME_WIDTH - constant.GAME_WIDTH / 5, 20)
-        scene.add.existing(this.scoreMessage);
+  public pauseGame(): void {
+    this.shouldShowFinishPopup(false);
+    this.scoreMessage.setText(
+      `${constant.SCORE_MESSAGE_TEXT} ${this.score.toString().padStart(3, "0")}`
+    );
+    this.scoreMessage.setVisible(true);
+    this.startImage.setVisible(true);
+  }
 
-        this.startImage = new Phaser.GameObjects.Image(scene, 0, 0, constant.TEXTURES, "message.png");
-        this.startImage.setDepth(constant.ENTITIES_DEPTH.UI)
-            .setOrigin(0.5, 0.5)
-            .setPosition(constant.GAME_WIDTH / 2, constant.GAME_HEIGHT / 2);
-        scene.add.existing(this.startImage);
+  // only succeeds(is called from) pauseGame
+  public playGame(): void {
+    this.startImage.setVisible(false);
+    this.scoreMessage.setVisible(true);
+  }
 
-        this.finishBack = new Phaser.GameObjects.Image(scene, 0, 0, constant.TEXTURES, "popup.png");
-        this.finishBack.setDepth(constant.ENTITIES_DEPTH.UI)
-            .setOrigin(0.5, 0.5)
-            .setPosition(constant.GAME_WIDTH / 2, constant.GAME_HEIGHT / 2);
-        scene.add.existing(this.finishBack);
+  public finishGame(): void {
+    this.scoreMessage.setVisible(false);
+    this.finishScoreMessage.setText(
+      `${constant.FINISH_SCORE_TEXT} ${this.score.toString().padStart(3, "0")}`
+    );
+    this.shouldShowFinishPopup(true);
+    this.score = 0;
+  }
 
-        this.finishImage = new Phaser.GameObjects.Image(scene, 0, 0, constant.TEXTURES, "gameover.png");
-        this.finishImage.setDepth(constant.ENTITIES_DEPTH.UI)
-            .setOrigin(0.5, 0.5)
-            .setPosition(constant.GAME_WIDTH / 2, constant.GAME_HEIGHT / 2 - 40);
-        scene.add.existing(this.finishImage);
-
-        this.finishScoreMessage = new Phaser.GameObjects.Text(scene,
-            0, 0,
-            "", constant.FINISH_MESSAGE_STYLE);
-        this.finishScoreMessage.setDepth(constant.ENTITIES_DEPTH.UI)
-            .setOrigin(0.5, 0.5)
-            .setPosition(constant.GAME_WIDTH / 2, constant.GAME_HEIGHT / 2 + 10);
-        scene.add.existing(this.finishScoreMessage);
-
-        this.finishRestartMessage = new Phaser.GameObjects.Text(scene,
-            0, 0,
-            constant.FINISH_RESTART_TEXT, constant.FINISH_MESSAGE_STYLE);
-        this.finishRestartMessage.setDepth(constant.ENTITIES_DEPTH.UI)
-            .setOrigin(0.5, 0.5)
-            .setPosition(constant.GAME_WIDTH / 2, constant.GAME_HEIGHT / 2 + 50);
-        scene.add.existing(this.finishRestartMessage);
-
-        scene.tweens.add({
-            targets: this.finishRestartMessage,
-            alpha: 0.6,
-            duration: 1000,
-            ease: "SineInOut",
-            yoyo: true,
-            repeat: -1,
-        });
-    }
-
-    updateScore() {
-        this.score++;
-        this.scoreMessage.setText(`${constant.SCORE_MESSAGE_TEXT} ${this.score.toString().padStart(3, "0")}`);
-    }
-
-    pauseGame() {
-        this.finishBack.setVisible(false);
-        this.finishImage.setVisible(false);
-        this.finishScoreMessage.setVisible(false);
-        this.finishRestartMessage.setVisible(false);
-
-        this.scoreMessage.setText(`${constant.SCORE_MESSAGE_TEXT} ${this.score.toString().padStart(3, "0")}`);
-        this.scoreMessage.setVisible(true);
-        this.startImage.setVisible(true);
-    }
-
-    // only succeeds pauseGame
-    playGame() {
-        this.startImage.setVisible(false);
-        this.scoreMessage.setVisible(true);
-    }
-
-    finishGame() {
-        this.scoreMessage.setVisible(false);
-
-        this.finishBack.setVisible(true);
-        this.finishImage.setVisible(true);
-        this.finishScoreMessage.setText(`${constant.FINISH_SCORE_TEXT} ${this.score.toString().padStart(3, "0")}`);
-        this.finishScoreMessage.setVisible(true);
-        this.finishRestartMessage.setVisible(true);
-
-        this.score = 0;
-    }
-
-    // update(gameState: constant.GAME_STATE) {
-    //     switch(gameState) {
-    //         case constant.GAME_STATE.PLAY:
-    //         case constant.GAME_STATE.PAUSE:
-    //             this.showScore
-    //     }
-    // }
+  public getScore = (): number => this.score;
 }

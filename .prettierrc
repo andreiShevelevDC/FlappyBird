@@ -1,1 +1,3 @@
-"@yandeu/prettier-config"
+{
+  "semi": true
+}
