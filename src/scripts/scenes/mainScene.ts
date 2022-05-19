@@ -5,17 +5,29 @@ import { Background } from "../views/background";
 import { Hud } from "../views/hud";
 import { Utility } from "../views/utility";
 
+enum GAME_STATE {
+  PLAY,
+  PAUSE,
+  FINISH,
+}
+
 export default class MainScene extends Phaser.Scene {
-  gameState: number = constant.GAME_STATE.FINISH;
-  gameSpeed: number = constant.GAME_WIDTH * constant.ACCELERATION;
-  background: Background;
-  pipesTop!: Phaser.GameObjects.Group;
-  pipesBottom!: Phaser.GameObjects.Group;
-  bird!: BirdComponent;
-  spacebarKey!: Phaser.Input.Keyboard.Key;
-  escapeKey!: Phaser.Input.Keyboard.Key;
-  hud!: Hud;
-  scoreSpeedUpStep: number = 1;
+  private readonly ACCELERATION = 0.005;
+  private readonly GRAVITY = 400;
+  private readonly GRAVITY_ZERO = 0;
+  private readonly FLAP_VELOCITY = 200;
+
+  //private readonly GAME_STATE = GAME_STATE;
+  private gameState: number = GAME_STATE.FINISH;
+  private gameSpeed: number = constant.GAME_WIDTH * this.ACCELERATION;
+  private background: Background;
+  private pipesTop!: Phaser.GameObjects.Group;
+  private pipesBottom!: Phaser.GameObjects.Group;
+  private bird!: BirdComponent;
+  private spacebarKey!: Phaser.Input.Keyboard.Key;
+  private escapeKey!: Phaser.Input.Keyboard.Key;
+  private hud!: Hud;
+  private scoreSpeedUpStep: number = 1;
 
   constructor() {
     super({ key: "MainScene" });
@@ -54,16 +66,16 @@ export default class MainScene extends Phaser.Scene {
 
   private birdFlap(): void {
     //console.log("flap");
-    if (this.gameState === constant.GAME_STATE.PAUSE) {
+    if (this.gameState === GAME_STATE.PAUSE) {
       this.setPlay();
     }
-    this.bird.setVelocityY(-constant.FLAP_VELOCITY);
+    this.bird.setVelocityY(-this.FLAP_VELOCITY);
   }
 
   private finishGame(): void {
-    if (this.gameState !== constant.GAME_STATE.FINISH) {
-      this.gameState = constant.GAME_STATE.FINISH;
-      this.bird.setVelocityY(constant.FLAP_VELOCITY); // death 'animation'
+    if (this.gameState !== GAME_STATE.FINISH) {
+      this.gameState = GAME_STATE.FINISH;
+      this.bird.setVelocityY(this.FLAP_VELOCITY); // death 'animation'
       this.hud.finishGame();
     }
   }
@@ -87,6 +99,16 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
+  private readonly PIPE_NUM = 1.5; //3.2;
+  private readonly HOLE_GAP_STEP = constant.GAME_HEIGHT / this.PIPE_NUM;
+  // vertical hole (distance between top and bottom pipe) sizes
+  private readonly HOLE_SIZE = [
+    (this.HOLE_GAP_STEP * this.PIPE_NUM) / 1.2,
+    (this.HOLE_GAP_STEP * this.PIPE_NUM) / 1.6,
+    (this.HOLE_GAP_STEP * this.PIPE_NUM) / 2,
+    (this.HOLE_GAP_STEP * this.PIPE_NUM) / 3,
+    (this.HOLE_GAP_STEP * this.PIPE_NUM) / 4,
+  ];
   // clamps center of the hole to fit it whole on the screen
   // while making it's not too different in position from previous hole
   private prevHoleCenter: number = (constant.GAME_HEIGHT - 50) / 2;
@@ -95,15 +117,21 @@ export default class MainScene extends Phaser.Scene {
     let center: number = Math.min(
       RAND_Y,
       constant.GAME_HEIGHT / 1.3 - holeWidth / 2,
-      this.prevHoleCenter + constant.HOLE_GAP_STEP
+      this.prevHoleCenter + this.HOLE_GAP_STEP
     );
     center = Math.max(
       center,
       holeWidth / 2,
-      this.prevHoleCenter - constant.HOLE_GAP_STEP
+      this.prevHoleCenter - this.HOLE_GAP_STEP
     );
     return center;
   };
+
+  // hole sizes (index from HOLE_SIZE)
+  // number of repetitions of each value affects probability of appearing
+  private readonly HOLE_DIFFICULTY = [
+    1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4,
+  ];
 
   private addPipes(): void {
     // HOLE_SIZE.forEach(size => console.log(size));
@@ -116,9 +144,9 @@ export default class MainScene extends Phaser.Scene {
     //     a--;
     // }
     let holeWidth: number =
-      constant.HOLE_SIZE[
-        constant.HOLE_DIFFICULTY[
-          Math.floor(Math.random() * constant.HOLE_DIFFICULTY.length)
+      this.HOLE_SIZE[
+        this.HOLE_DIFFICULTY[
+          Math.floor(Math.random() * this.HOLE_DIFFICULTY.length)
         ]
       ];
     let holeCenter = this.findHoleCenter(holeWidth);
@@ -142,10 +170,10 @@ export default class MainScene extends Phaser.Scene {
 
   private setAsPaused(): void {
     //console.log(" * Pause");
-    this.gameState = constant.GAME_STATE.PAUSE;
+    this.gameState = GAME_STATE.PAUSE;
     this.bird.hide();
     (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(
-      constant.GRAVITY_ZERO
+      this.GRAVITY_ZERO
     );
     this.bird.setVelocityY(0);
     this.hud.pauseGame();
@@ -153,10 +181,8 @@ export default class MainScene extends Phaser.Scene {
 
   private setPlay(): void {
     //console.log(" * Play");
-    this.gameState = constant.GAME_STATE.PLAY;
-    (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(
-      constant.GRAVITY
-    );
+    this.gameState = GAME_STATE.PLAY;
+    (this.bird.body as Phaser.Physics.Arcade.Body).setGravityY(this.GRAVITY);
     this.bird.show();
     this.hud.playGame();
   }
@@ -179,12 +205,12 @@ export default class MainScene extends Phaser.Scene {
   private pollKeyboard(): void {
     if (
       Phaser.Input.Keyboard.JustDown(this.escapeKey) &&
-      this.gameState === constant.GAME_STATE.PLAY
+      this.gameState === GAME_STATE.PLAY
     ) {
       this.setAsPaused();
     }
     if (Phaser.Input.Keyboard.JustDown(this.spacebarKey)) {
-      if (this.gameState !== constant.GAME_STATE.FINISH) {
+      if (this.gameState !== GAME_STATE.FINISH) {
         this.birdFlap();
         this.bird.anims.play("flap");
       } else this.resetGame();
@@ -193,12 +219,12 @@ export default class MainScene extends Phaser.Scene {
 
   private onClick(): void {
     switch (this.gameState) {
-      case constant.GAME_STATE.PLAY:
-      case constant.GAME_STATE.PAUSE:
+      case GAME_STATE.PLAY:
+      case GAME_STATE.PAUSE:
         this.birdFlap();
         this.bird.anims.play("flap");
         break;
-      case constant.GAME_STATE.FINISH:
+      case GAME_STATE.FINISH:
         this.resetGame();
     }
   }
@@ -217,7 +243,7 @@ export default class MainScene extends Phaser.Scene {
       currScore > this.scoreSpeedUpStep &&
       currScore % SPEEDUP_THRESHOLD === 0
     ) {
-      this.gameSpeed += this.gameSpeed * constant.ACCELERATION * 50;
+      this.gameSpeed += this.gameSpeed * this.ACCELERATION * 50;
       //console.log(gameSpeed);
       this.scoreSpeedUpStep = currScore;
     }
@@ -238,7 +264,7 @@ export default class MainScene extends Phaser.Scene {
 
   update() {
     this.pollKeyboard();
-    if (this.gameState === constant.GAME_STATE.PLAY) {
+    if (this.gameState === GAME_STATE.PLAY) {
       if (this.bird.isOutOfScreen()) this.finishGame();
       this.background.doParallax(this.gameSpeed);
       let allPipesTop: Phaser.GameObjects.GameObject[] =
@@ -251,10 +277,11 @@ export default class MainScene extends Phaser.Scene {
         this.countScore(allPipesTop[i] as PipeComponent);
         // create a new pair of pipes,
         // if the last (newest) pair has moved more than PIPE_GAP_STEP
+        const PIPE_GAP_STEP = constant.GAME_WIDTH / this.PIPE_NUM;
         if (
           i === allPipesTop.length - 1 &&
           (allPipesTop[i] as Phaser.Physics.Arcade.Sprite).x <
-            constant.GAME_WIDTH - constant.PIPE_GAP_STEP
+            constant.GAME_WIDTH - PIPE_GAP_STEP
         )
           this.addPipes();
       }

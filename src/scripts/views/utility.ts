@@ -26,7 +26,7 @@ export class Utility {
       undefined,
       100,
       this.imageList[this.index],
-      constant.FINISH_MESSAGE_STYLE
+      constant.MESSAGE_STYLE
     );
     currImage
       .setInteractive()

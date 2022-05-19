@@ -7,6 +7,7 @@ import { TextComponent } from "./text-component";
 import { ImageComponent } from "./image-component";
 
 export class Hud extends Phaser.GameObjects.Container {
+  private readonly SCORE_MESSAGE_TEXT = "Score:";
   private score: number = 0;
   private scoreMessage!: TextComponent;
   private startImage!: ImageComponent;
@@ -22,13 +23,20 @@ export class Hud extends Phaser.GameObjects.Container {
   }
 
   private build(scene): void {
+    const SCORE_STYLE = {
+      font: "16px Verdana",
+      fontStyle: "strong",
+      fill: "#ff0000",
+      align: "right",
+    };
     this.scoreMessage = new TextComponent(
       scene,
       constant.GAME_WIDTH - constant.GAME_WIDTH / 5,
       20,
       "",
-      constant.SCORE_STYLE
+      SCORE_STYLE
     );
+    //export const PAUSE_MESSAGE_TEXT = "Press SPACE to play\n\nESCAPE to pause";
     this.startImage = new ImageComponent(
       scene,
       undefined,
@@ -52,14 +60,15 @@ export class Hud extends Phaser.GameObjects.Container {
       undefined,
       constant.GAME_HEIGHT / 2 + 10,
       "",
-      constant.FINISH_MESSAGE_STYLE
+      constant.MESSAGE_STYLE
     );
+    const FINISH_RESTART_TEXT = "Click or press SPACE\nto restart";
     this.finishRestartMessage = new TextComponent(
       scene,
       undefined,
       constant.GAME_HEIGHT / 2 + 50,
-      constant.FINISH_RESTART_TEXT,
-      constant.FINISH_MESSAGE_STYLE
+      FINISH_RESTART_TEXT,
+      constant.MESSAGE_STYLE
     );
     scene.tweens.add({
       targets: this.finishRestartMessage,
@@ -74,7 +83,7 @@ export class Hud extends Phaser.GameObjects.Container {
   public updateScore(): void {
     this.score++;
     this.scoreMessage.setText(
-      `${constant.SCORE_MESSAGE_TEXT} ${this.score.toString().padStart(3, "0")}`
+      `${this.SCORE_MESSAGE_TEXT} ${this.score.toString().padStart(3, "0")}`
     );
   }
 
@@ -88,7 +97,7 @@ export class Hud extends Phaser.GameObjects.Container {
   public pauseGame(): void {
     this.shouldShowFinishPopup(false);
     this.scoreMessage.setText(
-      `${constant.SCORE_MESSAGE_TEXT} ${this.score.toString().padStart(3, "0")}`
+      `${this.SCORE_MESSAGE_TEXT} ${this.score.toString().padStart(3, "0")}`
     );
     this.scoreMessage.setVisible(true);
     this.startImage.setVisible(true);
@@ -101,9 +110,10 @@ export class Hud extends Phaser.GameObjects.Container {
   }
 
   public finishGame(): void {
+    const FINISH_SCORE_TEXT = "Your score:";
     this.scoreMessage.setVisible(false);
     this.finishScoreMessage.setText(
-      `${constant.FINISH_SCORE_TEXT} ${this.score.toString().padStart(3, "0")}`
+      `${FINISH_SCORE_TEXT} ${this.score.toString().padStart(3, "0")}`
     );
     this.shouldShowFinishPopup(true);
     this.score = 0;

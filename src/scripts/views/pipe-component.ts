@@ -7,8 +7,8 @@ export class PipeComponent extends Phaser.Physics.Arcade.Sprite {
 
   constructor(scene: Phaser.Scene, isTop: boolean, y: number) {
     let image_name: string;
-    if (isTop) image_name = constant.IMAGE_PIPE;
-    else image_name = constant.IMAGE_PIPE_BOTTOM;
+    if (isTop) image_name = "pipe-2.png";
+    else image_name = "pipe-1.png";
     super(
       scene,
       constant.GAME_WIDTH + PipeComponent.PIPE_WIDTH / 2,
