@@ -6,10 +6,7 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    //this.load.image("image_back", "assets/back.png");
-
     this.load.atlas(TEXTURES, "../assets/main.png", "../assets/main.json");
-
     this.load.spritesheet(SPRITESHEET_BIRD, "assets/bird.png", {
       frameWidth: 34,
       frameHeight: 24,
@@ -17,11 +14,7 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    // doesn't work here
-    //this.add.image(0, 0, "image_back").setOrigin(0, 0);
-
     this.scene.start('MainScene')
-
     /**
      * This is how you would dynamically import the mainScene class (with code splitting),
      * add the mainScene to the Scene Manager

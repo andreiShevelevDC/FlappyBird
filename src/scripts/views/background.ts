@@ -2,9 +2,9 @@ import * as constant from "../constant";
 
 export class Background {
 
-    readonly TILE_WIDTH = 288;
-    readonly BASE_WIDTH = 336;
-    readonly BASE_HEIGHT = 112;
+    private readonly TILE_WIDTH = 288;
+    private readonly BASE_WIDTH = 336;
+    private readonly BASE_HEIGHT = 112;
 
     private back: Phaser.GameObjects.TileSprite[] = [];
     private base: Phaser.GameObjects.TileSprite[] = [];
@@ -30,7 +30,7 @@ export class Background {
 
         for(let i = 0; i < basesNum; i++) {
             base_tile = new Phaser.GameObjects.TileSprite(scene,
-                i * this.BASE_WIDTH, 512 - this.BASE_HEIGHT + 100, // Why 100?
+                i * this.BASE_WIDTH, constant.GAME_HEIGHT - this.BASE_HEIGHT, // Why 100?
                 this.BASE_WIDTH, this.BASE_HEIGHT,
                 constant.TEXTURES, "base.png")
                 //.setScale(2)
@@ -42,7 +42,7 @@ export class Background {
     }
 
     // move background RTL
-    parallax(gameSpeed: number): void {
+    doParallax(gameSpeed: number): void {
         // this.back.forEach(tile => {
         //     tile.tilePositionX -= gameSpeed / 3;
         // });

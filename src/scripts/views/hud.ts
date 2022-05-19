@@ -4,13 +4,11 @@
 
 import * as constant from "./../constant";
 
-export class HUD extends Phaser.GameObjects.Container {
+export class Hud extends Phaser.GameObjects.Container {
 
     private score: number = 0;
-
     private scoreMessage!: Phaser.GameObjects.Text;
     private startImage!: Phaser.GameObjects.Image;
-
     private finishBack!: Phaser.GameObjects.Image;
     private finishImage!: Phaser.GameObjects.Image;
     private finishScoreMessage!: Phaser.GameObjects.Text;

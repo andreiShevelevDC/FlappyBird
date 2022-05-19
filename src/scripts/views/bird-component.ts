@@ -2,7 +2,7 @@ import * as constant from "./../constant";
 
 export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
 
-  constructor(scene: Phaser.Scene) {
+  public constructor(scene: Phaser.Scene) {
     super(scene, constant.BIRD_POS_X, constant.BIRD_POS_Y, constant.SPRITESHEET_BIRD);
 
     scene.add.existing(this);
@@ -12,6 +12,10 @@ export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
       .setCollideWorldBounds(false)
       .setDepth(constant.ENTITIES_DEPTH.BIRD);
 
+    this.createAnimation();
+  }
+
+  private createAnimation(): void {
     this.anims.create({
       key: "flap",
       frames: this.anims.generateFrameNumbers(constant.SPRITESHEET_BIRD, {
@@ -23,20 +27,19 @@ export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
     });
   }
 
-  restart(): void {
-    //this.setCollideWorldBounds(true);
+  public resetPosition(): void {
     this.setPosition(constant.BIRD_POS_X, constant.BIRD_POS_Y);
   }
 
   // death
-  isOutOfScreen = (): boolean =>
+  public isOutOfScreen = (): boolean =>
     (this.y < 0 || this.y > constant.GAME_HEIGHT);
 
-  show(): void {
+  public show(): void {
     this.setVisible(true);
   }
 
-  hide(): void {
+  public hide(): void {
     this.setVisible(false);
   }
 }

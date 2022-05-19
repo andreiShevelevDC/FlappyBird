@@ -10,9 +10,7 @@ export class PipeComponent extends Phaser.Physics.Arcade.Sprite {
     let image_name: string;
     if(isTop) image_name = constant.IMAGE_PIPE;
     else image_name = constant.IMAGE_PIPE_BOTTOM;
-
     super(scene, constant.GAME_WIDTH + PipeComponent.PIPE_WIDTH / 2, y, constant.TEXTURES, image_name);
-
     this.setDepth(constant.ENTITIES_DEPTH.PIPES);
     scene.add.existing(this);
     //scene.physics.add.existing(this);
