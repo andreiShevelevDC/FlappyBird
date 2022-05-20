@@ -44,6 +44,7 @@ export default class MainScene extends Phaser.Scene {
     this.resetGame();
     this.attachListeners();
     this.setAsPaused();
+    //this.background.buildBackground(this);
   }
 
   private createBirdPipesCollision(): void {
@@ -200,6 +201,10 @@ export default class MainScene extends Phaser.Scene {
     backs.forEach((bck) =>
       bck.setInteractive().on("pointerdown", () => this.onClick())
     );
+    this.scale.on("orientationchange", () =>
+      this.background.buildBackground(this)
+    );
+    //this.scale.on("resize", () => this.background.buildBackground());
   }
 
   private pollKeyboard(): void {

@@ -27,8 +27,7 @@ export class PipeComponent extends Phaser.Physics.Arcade.Sprite {
   }
 
   public isInCounterWindow = (gameSpeed: number): boolean =>
-    this.x <= constant.BIRD_POS_X &&
-    this.x >= constant.BIRD_POS_X - gameSpeed * 1.1;
+    this.x < constant.BIRD_POS_X && this.x >= constant.BIRD_POS_X - gameSpeed;
 
   public isOutOfWindow = (): boolean => this.x < -PipeComponent.PIPE_WIDTH / 2;
 }

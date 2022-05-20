@@ -23,7 +23,7 @@ export class TextComponent extends Phaser.GameObjects.Text {
     (this as Phaser.GameObjects.Text).setVisible(false);
   }
 
-  public setNewText(newText: string): void {
-    this.setText(newText);
-  }
+  // public setNewText(newText: string): void {
+  //   this.setText(newText);
+  // }
 }

@@ -1,4 +1,5 @@
 import * as constant from "../constant";
+import { TextComponent } from "./text-component";
 
 export class Background {
   private readonly TILE_WIDTH = 288;
@@ -6,8 +7,15 @@ export class Background {
   private readonly BASE_HEIGHT = 112;
   private back: Phaser.GameObjects.TileSprite[] = [];
   private base: Phaser.GameObjects.TileSprite[] = [];
+  private orientationMessage: TextComponent; // debug/utility
 
   public constructor(scene: Phaser.Scene) {
+    this.buildBackground(scene);
+  }
+
+  public buildBackground(scene: Phaser.Scene): void {
+    //this.showOrientation(scene);
+    this.deleteBackground();
     let tile: Phaser.GameObjects.TileSprite;
     let tilesNum: number = Math.ceil(constant.GAME_WIDTH / this.TILE_WIDTH);
     for (let i = 0; i < tilesNum; i++) {
@@ -45,6 +53,24 @@ export class Background {
     }
   }
 
+  // debug/utility
+  private showOrientation(scene: Phaser.Scene): void {
+    if (this.orientationMessage === undefined) {
+      this.orientationMessage = new TextComponent(
+        scene,
+        undefined,
+        constant.GAME_HEIGHT - 50,
+        `${scene.scale.orientation}`,
+        {
+          font: "16px Verdana",
+          fontStyle: "strong",
+          color: "#ff0000",
+          align: "right",
+        }
+      );
+    } else this.orientationMessage.setText(`${scene.scale.orientation}`);
+  }
+
   // move background RTL
   public doParallax(gameSpeed: number): void {
     let reps =
@@ -58,4 +84,13 @@ export class Background {
   }
 
   public getBackground = (): Phaser.GameObjects.TileSprite[] => this.back;
+
+  private deleteBackground(): void {
+    for (let i = 0; i < this.back.length; i++) {
+      this.back[i].destroy();
+    }
+    for (let i = 0; i < this.base.length; i++) {
+      this.base[i].destroy();
+    }
+  }
 }
