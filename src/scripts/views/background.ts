@@ -10,11 +10,11 @@ export class Background {
   private orientationMessage: TextComponent; // debug/utility
 
   public constructor(scene: Phaser.Scene) {
-    this.buildBackground(scene);
+    //this.buildBackground(scene);
   }
 
   public buildBackground(scene: Phaser.Scene): void {
-    //this.showOrientation(scene);
+    //this.showAspectRatio(scene);
     this.deleteBackground();
     let tile: Phaser.GameObjects.TileSprite;
     let tilesNum: number = Math.ceil(constant.GAME_WIDTH / this.TILE_WIDTH);
@@ -54,13 +54,16 @@ export class Background {
   }
 
   // debug/utility
-  private showOrientation(scene: Phaser.Scene): void {
+  public showAspectRatio(scene: Phaser.Scene): void {
+    let aspectRatioText: string = `gameSize = ${scene.scale.gameSize.width}/${scene.scale.gameSize.height}
+    displaySize = ${scene.scale.displaySize.width}/${scene.scale.displaySize.height}`;
+
     if (this.orientationMessage === undefined) {
       this.orientationMessage = new TextComponent(
         scene,
         undefined,
-        constant.GAME_HEIGHT - 50,
-        `${scene.scale.orientation}`,
+        constant.GAME_HEIGHT - 30,
+        aspectRatioText,
         {
           font: "16px Verdana",
           fontStyle: "strong",
@@ -68,7 +71,7 @@ export class Background {
           align: "right",
         }
       );
-    } else this.orientationMessage.setText(`${scene.scale.orientation}`);
+    } else this.orientationMessage.setText(aspectRatioText);
   }
 
   // move background RTL

@@ -17,16 +17,16 @@ export default class MainScene extends Phaser.Scene {
   private readonly GRAVITY_ZERO = 0;
   private readonly FLAP_VELOCITY = 200;
 
-  //private readonly GAME_STATE = GAME_STATE;
+  private verticalMode: boolean = window.innerHeight > window.innerWidth;
   private gameState: number = GAME_STATE.FINISH;
   private gameSpeed: number = constant.GAME_WIDTH * this.ACCELERATION;
   private background: Background;
-  private pipesTop!: Phaser.GameObjects.Group;
-  private pipesBottom!: Phaser.GameObjects.Group;
-  private bird!: BirdComponent;
-  private spacebarKey!: Phaser.Input.Keyboard.Key;
-  private escapeKey!: Phaser.Input.Keyboard.Key;
-  private hud!: Hud;
+  private pipesTop: Phaser.GameObjects.Group;
+  private pipesBottom: Phaser.GameObjects.Group;
+  private bird: BirdComponent;
+  private spacebarKey: Phaser.Input.Keyboard.Key;
+  private escapeKey: Phaser.Input.Keyboard.Key;
+  private hud: Hud;
   private scoreSpeedUpStep: number = 1;
 
   constructor() {
@@ -35,7 +35,9 @@ export default class MainScene extends Phaser.Scene {
 
   create() {
     //new Utility(this);
+    this.changeOrientation();
     this.background = new Background(this);
+    this.rebuildWorldAndHud();
     this.pipesTop = this.physics.add.staticGroup();
     this.pipesBottom = this.physics.add.staticGroup();
     this.bird = new BirdComponent(this);
@@ -44,7 +46,11 @@ export default class MainScene extends Phaser.Scene {
     this.resetGame();
     this.attachListeners();
     this.setAsPaused();
-    //this.background.buildBackground(this);
+  }
+
+  private rebuildWorldAndHud() {
+    this.background.buildBackground(this);
+    this.attachClickListenerToBackground();
   }
 
   private createBirdPipesCollision(): void {
@@ -197,14 +203,14 @@ export default class MainScene extends Phaser.Scene {
     );
     //this.input.keyboard.on('keydown-SPACE', birdFlap);
     //this.input.on('pointerdown', birdFlap);
+    this.scale.on("resize", () => this.changeOrientation());
+  }
+
+  private attachClickListenerToBackground(): void {
     let backs = this.background.getBackground();
     backs.forEach((bck) =>
       bck.setInteractive().on("pointerdown", () => this.onClick())
     );
-    this.scale.on("orientationchange", () =>
-      this.background.buildBackground(this)
-    );
-    //this.scale.on("resize", () => this.background.buildBackground());
   }
 
   private pollKeyboard(): void {
@@ -292,6 +298,21 @@ export default class MainScene extends Phaser.Scene {
       }
       this.speedGameUp();
       this.destroyInvisiblePipes(allPipesTop, allPipesBottom);
+    }
+  }
+
+  changeOrientation(
+    orientation: boolean = window.innerWidth > window.innerHeight
+  ) {
+    if (!orientation && !this.verticalMode) {
+      this.verticalMode = true;
+      this.scale.setGameSize(constant.GAME_WIDTH, constant.GAME_HEIGHT);
+      this.rebuildWorldAndHud();
+    }
+    if (orientation && this.verticalMode) {
+      this.verticalMode = false;
+      this.scale.setGameSize(constant.GAME_HEIGHT, constant.GAME_WIDTH);
+      this.rebuildWorldAndHud();
     }
   }
 }
