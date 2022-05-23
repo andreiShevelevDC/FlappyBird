@@ -2,6 +2,7 @@ import "phaser";
 import * as constant from "./constant";
 import MainScene from "./scenes/mainScene";
 import PreloadScene from "./scenes/preloadScene";
+import { isWindowPortrait } from "./views/utility";
 
 const config = {
   type: Phaser.AUTO,
@@ -24,7 +25,7 @@ const config = {
 
 window.addEventListener("load", initGame);
 function initGame() {
-  if (window.innerWidth > window.innerHeight) {
+  if (!isWindowPortrait()) {
     config.scale.width = constant.GAME_SIZE_LONG;
     config.scale.height = constant.GAME_SIZE_SHORT;
   }

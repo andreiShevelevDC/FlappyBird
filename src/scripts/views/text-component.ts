@@ -1,17 +1,18 @@
 import * as constant from "../constant";
+import { getCenterX, getCenterY } from "./utility";
 
 export class TextComponent extends Phaser.GameObjects.Text {
   constructor(
     scene: Phaser.Scene,
-    x: number = constant.GAME_SIZE_SHORT / 2,
-    y: number = constant.GAME_SIZE_LONG / 2,
+    x: number = getCenterX(),
+    y: number = getCenterY(),
     text: string,
     style: Phaser.Types.GameObjects.Text.TextStyle
   ) {
     super(scene, 0, 0, text, style);
     this.setDepth(constant.ENTITIES_DEPTH.HUD)
       .setOrigin(0.5, 0.5)
-      .setPosition(x as number, y as number);
+      .setPosition(x, y);
     scene.add.existing(this);
   }
 
@@ -22,8 +23,4 @@ export class TextComponent extends Phaser.GameObjects.Text {
   public hide(): void {
     (this as Phaser.GameObjects.Text).setVisible(false);
   }
-
-  // public setNewText(newText: string): void {
-  //   this.setText(newText);
-  // }
 }

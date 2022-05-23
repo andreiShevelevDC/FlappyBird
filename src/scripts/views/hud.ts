@@ -9,12 +9,12 @@ import { ImageComponent } from "./image-component";
 export class Hud extends Phaser.GameObjects.Container {
   private readonly SCORE_MESSAGE_TEXT = "Score:";
   private score: number = 0;
-  private scoreMessage!: TextComponent;
-  private startImage!: ImageComponent;
-  private finishBack!: ImageComponent;
-  private finishImage!: ImageComponent;
-  private finishScoreMessage!: TextComponent;
-  private finishRestartMessage!: TextComponent;
+  private scoreMessage: TextComponent;
+  private startImage: ImageComponent;
+  private finishBack: ImageComponent;
+  private finishImage: ImageComponent;
+  private finishScoreMessage: TextComponent;
+  private finishRestartMessage: TextComponent;
 
   public constructor(public scene: Phaser.Scene) {
     super(scene);

@@ -1,7 +1,19 @@
-// utility method to show all images and their names from TEXTURES
 import * as constant from "./../constant";
 import { TextComponent } from "./text-component";
 import { ImageComponent } from "./image-component";
+
+export const isWindowPortrait = (): boolean =>
+  window.innerHeight > window.innerWidth;
+
+export const getCenterX = (): number =>
+  isWindowPortrait()
+    ? constant.GAME_SIZE_SHORT / 2
+    : constant.GAME_SIZE_LONG / 2;
+
+export const getCenterY = (): number =>
+  isWindowPortrait()
+    ? constant.GAME_SIZE_LONG / 2
+    : constant.GAME_SIZE_SHORT / 2;
 
 export class Utility {
   private scene: Phaser.Scene;
@@ -11,10 +23,11 @@ export class Utility {
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
     this.imageList = this.scene.textures.get(constant.TEXTURES).getFrameNames();
-    this.showImageAndName();
+    this.showImagesAndNames();
   }
 
-  private showImageAndName(): void {
+  // shows all Images and their names in TEXTURES
+  private showImagesAndNames(): void {
     let currImage = new ImageComponent(
       this.scene,
       undefined,
@@ -37,6 +50,6 @@ export class Utility {
     img.destroy();
     name.destroy();
     if (++this.index > this.imageList.length) this.index = 0;
-    this.showImageAndName();
+    this.showImagesAndNames();
   }
 }

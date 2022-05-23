@@ -2,12 +2,13 @@
 // in the center of the screen
 
 import * as constant from "./../constant";
+import { getCenterX, getCenterY } from "./utility";
 
 export class ImageComponent extends Phaser.GameObjects.Image {
   constructor(
     scene: Phaser.Scene,
-    x: number = constant.GAME_SIZE_SHORT / 2,
-    y: number = constant.GAME_SIZE_LONG / 2,
+    x: number = getCenterX(),
+    y: number = getCenterY(),
     name: string
   ) {
     super(scene, 0, 0, constant.TEXTURES, name);
