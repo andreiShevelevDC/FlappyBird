@@ -11,7 +11,7 @@ export class PipeComponent extends Phaser.Physics.Arcade.Sprite {
     else image_name = "pipe-1.png";
     super(
       scene,
-      constant.GAME_WIDTH + PipeComponent.PIPE_WIDTH / 2,
+      constant.GAME_SIZE_SHORT + PipeComponent.PIPE_WIDTH / 2,
       y,
       constant.TEXTURES,
       image_name

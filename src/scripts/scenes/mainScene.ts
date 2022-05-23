@@ -19,7 +19,7 @@ export default class MainScene extends Phaser.Scene {
 
   private verticalMode: boolean = window.innerHeight > window.innerWidth;
   private gameState: number = GAME_STATE.FINISH;
-  private gameSpeed: number = constant.GAME_WIDTH * this.ACCELERATION;
+  private gameSpeed: number = constant.GAME_SIZE_SHORT * this.ACCELERATION;
   private background: Background;
   private pipesTop: Phaser.GameObjects.Group;
   private pipesBottom: Phaser.GameObjects.Group;
@@ -107,7 +107,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   private readonly PIPE_NUM = 1.5; //3.2;
-  private readonly HOLE_GAP_STEP = constant.GAME_HEIGHT / this.PIPE_NUM;
+  private readonly HOLE_GAP_STEP = constant.GAME_SIZE_LONG / this.PIPE_NUM;
   // vertical hole (distance between top and bottom pipe) sizes
   private readonly HOLE_SIZE = [
     (this.HOLE_GAP_STEP * this.PIPE_NUM) / 1.2,
@@ -118,12 +118,12 @@ export default class MainScene extends Phaser.Scene {
   ];
   // clamps center of the hole to fit it whole on the screen
   // while making it's not too different in position from previous hole
-  private prevHoleCenter: number = (constant.GAME_HEIGHT - 50) / 2;
+  private prevHoleCenter: number = (constant.GAME_SIZE_LONG - 50) / 2;
   private findHoleCenter = (holeWidth: number): number => {
-    const RAND_Y = (Math.random() * constant.GAME_HEIGHT) / 1.3;
+    const RAND_Y = (Math.random() * constant.GAME_SIZE_LONG) / 1.3;
     let center: number = Math.min(
       RAND_Y,
-      constant.GAME_HEIGHT / 1.3 - holeWidth / 2,
+      constant.GAME_SIZE_LONG / 1.3 - holeWidth / 2,
       this.prevHoleCenter + this.HOLE_GAP_STEP
     );
     center = Math.max(
@@ -288,11 +288,11 @@ export default class MainScene extends Phaser.Scene {
         this.countScore(allPipesTop[i] as PipeComponent);
         // create a new pair of pipes,
         // if the last (newest) pair has moved more than PIPE_GAP_STEP
-        const PIPE_GAP_STEP = constant.GAME_WIDTH / this.PIPE_NUM;
+        const PIPE_GAP_STEP = constant.GAME_SIZE_SHORT / this.PIPE_NUM;
         if (
           i === allPipesTop.length - 1 &&
           (allPipesTop[i] as Phaser.Physics.Arcade.Sprite).x <
-            constant.GAME_WIDTH - PIPE_GAP_STEP
+            constant.GAME_SIZE_SHORT - PIPE_GAP_STEP
         )
           this.addPipes();
       }
@@ -306,12 +306,12 @@ export default class MainScene extends Phaser.Scene {
   ) {
     if (!orientation && !this.verticalMode) {
       this.verticalMode = true;
-      this.scale.setGameSize(constant.GAME_WIDTH, constant.GAME_HEIGHT);
+      this.scale.setGameSize(constant.GAME_SIZE_SHORT, constant.GAME_SIZE_LONG);
       this.rebuildWorldAndHud();
     }
     if (orientation && this.verticalMode) {
       this.verticalMode = false;
-      this.scale.setGameSize(constant.GAME_HEIGHT, constant.GAME_WIDTH);
+      this.scale.setGameSize(constant.GAME_SIZE_LONG, constant.GAME_SIZE_SHORT);
       this.rebuildWorldAndHud();
     }
   }

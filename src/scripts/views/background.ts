@@ -17,7 +17,9 @@ export class Background {
     //this.showAspectRatio(scene);
     this.deleteBackground();
     let tile: Phaser.GameObjects.TileSprite;
-    let tilesNum: number = Math.ceil(constant.GAME_WIDTH / this.TILE_WIDTH);
+    let tilesNum: number = Math.ceil(
+      constant.GAME_SIZE_SHORT / this.TILE_WIDTH
+    );
     for (let i = 0; i < tilesNum; i++) {
       tile = new Phaser.GameObjects.TileSprite(
         scene,
@@ -34,13 +36,15 @@ export class Background {
       this.back[i] = tile;
     }
     let base_tile: Phaser.GameObjects.TileSprite;
-    let basesNum: number = Math.ceil(constant.GAME_WIDTH / this.BASE_WIDTH);
+    let basesNum: number = Math.ceil(
+      constant.GAME_SIZE_SHORT / this.BASE_WIDTH
+    );
     if (basesNum === 1) basesNum++;
     for (let i = 0; i < basesNum; i++) {
       base_tile = new Phaser.GameObjects.TileSprite(
         scene,
         i * this.BASE_WIDTH,
-        constant.GAME_HEIGHT - this.BASE_HEIGHT + 100, // TODO Why need 100?
+        constant.GAME_SIZE_LONG - this.BASE_HEIGHT + 100, // TODO Why need 100?
         this.BASE_WIDTH,
         this.BASE_HEIGHT,
         constant.TEXTURES,
@@ -62,7 +66,7 @@ export class Background {
       this.orientationMessage = new TextComponent(
         scene,
         undefined,
-        constant.GAME_HEIGHT - 30,
+        constant.GAME_SIZE_LONG - 30,
         aspectRatioText,
         {
           font: "16px Verdana",

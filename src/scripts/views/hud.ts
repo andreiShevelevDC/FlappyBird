@@ -31,7 +31,7 @@ export class Hud extends Phaser.GameObjects.Container {
     };
     this.scoreMessage = new TextComponent(
       scene,
-      constant.GAME_WIDTH - constant.GAME_WIDTH / 5,
+      constant.GAME_SIZE_SHORT - constant.GAME_SIZE_SHORT / 5,
       20,
       "",
       SCORE_STYLE
@@ -52,13 +52,13 @@ export class Hud extends Phaser.GameObjects.Container {
     this.finishImage = new ImageComponent(
       scene,
       undefined,
-      constant.GAME_HEIGHT / 2 - 40,
+      constant.GAME_SIZE_LONG / 2 - 40,
       "gameover.png"
     );
     this.finishScoreMessage = new TextComponent(
       scene,
       undefined,
-      constant.GAME_HEIGHT / 2 + 10,
+      constant.GAME_SIZE_LONG / 2 + 10,
       "",
       constant.MESSAGE_STYLE
     );
@@ -66,7 +66,7 @@ export class Hud extends Phaser.GameObjects.Container {
     this.finishRestartMessage = new TextComponent(
       scene,
       undefined,
-      constant.GAME_HEIGHT / 2 + 50,
+      constant.GAME_SIZE_LONG / 2 + 50,
       FINISH_RESTART_TEXT,
       constant.MESSAGE_STYLE
     );

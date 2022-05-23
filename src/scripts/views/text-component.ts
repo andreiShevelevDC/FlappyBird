@@ -3,8 +3,8 @@ import * as constant from "../constant";
 export class TextComponent extends Phaser.GameObjects.Text {
   constructor(
     scene: Phaser.Scene,
-    x: number = constant.GAME_WIDTH / 2,
-    y: number = constant.GAME_HEIGHT / 2,
+    x: number = constant.GAME_SIZE_SHORT / 2,
+    y: number = constant.GAME_SIZE_LONG / 2,
     text: string,
     style: Phaser.Types.GameObjects.Text.TextStyle
   ) {
