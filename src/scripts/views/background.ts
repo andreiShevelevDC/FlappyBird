@@ -32,8 +32,7 @@ export class Background {
       this.back[i] = tile;
     }
     let base_tile: Phaser.GameObjects.TileSprite;
-    let basesNum: number = Math.ceil(getSizeX() / this.BASE_WIDTH);
-    if (basesNum === 1) basesNum++;
+    let basesNum: number = Math.ceil(getSizeX() / this.BASE_WIDTH) + 1;
     for (let i = 0; i < basesNum; i++) {
       base_tile = new Phaser.GameObjects.TileSprite(
         scene,

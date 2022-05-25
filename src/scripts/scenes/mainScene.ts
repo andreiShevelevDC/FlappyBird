@@ -3,7 +3,7 @@ import { BirdComponent } from "../views/bird-component";
 import { PipeComponent } from "../views/pipe-component";
 import { Background } from "../views/background";
 import { Hud } from "../views/hud";
-import { Utility } from "../views/utility";
+import { getCenterY, getSizeY, Utility } from "../views/utility";
 
 enum GAME_STATE {
   PLAY,
@@ -111,51 +111,51 @@ export default class MainScene extends Phaser.Scene {
   }
 
   private readonly PIPE_NUM = 1.5; //3.2;
-  private readonly HOLE_GAP_STEP = constant.GAME_SIZE_LONG / this.PIPE_NUM;
+  private holeGapStep = getSizeY() / this.PIPE_NUM;
   // vertical hole (distance between top and bottom pipe) sizes
-  private readonly HOLE_SIZE = [
-    (this.HOLE_GAP_STEP * this.PIPE_NUM) / 1.2,
-    (this.HOLE_GAP_STEP * this.PIPE_NUM) / 1.6,
-    (this.HOLE_GAP_STEP * this.PIPE_NUM) / 2,
-    (this.HOLE_GAP_STEP * this.PIPE_NUM) / 3,
-    (this.HOLE_GAP_STEP * this.PIPE_NUM) / 4,
+  private holeSizes = [
+    (this.holeGapStep * this.PIPE_NUM) / 1.2,
+    (this.holeGapStep * this.PIPE_NUM) / 1.6,
+    (this.holeGapStep * this.PIPE_NUM) / 2,
+    (this.holeGapStep * this.PIPE_NUM) / 3,
+    (this.holeGapStep * this.PIPE_NUM) / 3.6,
   ];
   // clamps center of the hole to fit it whole on the screen
   // while making it's not too different in position from previous hole
-  private prevHoleCenter: number = (constant.GAME_SIZE_LONG - 50) / 2;
+  private prevHoleCenter: number = getCenterY() - 30; // to adjust for base height
   private findHoleCenter = (holeWidth: number): number => {
-    const RAND_Y = (Math.random() * constant.GAME_SIZE_LONG) / 1.3;
+    const RAND_Y = (Math.random() * getSizeY()) / 1.3;
     let center: number = Math.min(
       RAND_Y,
-      constant.GAME_SIZE_LONG / 1.3 - holeWidth / 2,
-      this.prevHoleCenter + this.HOLE_GAP_STEP
+      getSizeY() / 1.3 - holeWidth / 2,
+      this.prevHoleCenter + this.holeGapStep
     );
     center = Math.max(
       center,
       holeWidth / 2,
-      this.prevHoleCenter - this.HOLE_GAP_STEP
+      this.prevHoleCenter - this.holeGapStep
     );
     return center;
   };
 
-  // hole sizes (index from HOLE_SIZE)
+  // hole sizes (index from holeSizes)
   // number of repetitions of each value affects probability of appearing
   private readonly HOLE_DIFFICULTY = [
     1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4,
   ];
 
   private addPipes(): void {
-    // HOLE_SIZE.forEach(size => console.log(size));
+    // holeSizes.forEach(size => console.log(size));
     // let a = 20;
     // while(a > 0) {
-    //     let randWidth = HOLE_SIZE[HOLE_DIFFICULTY[Math.floor(Math.random() * HOLE_DIFFICULTY.length)]];
+    //     let randWidth = holeSizes[HOLE_DIFFICULTY[Math.floor(Math.random() * HOLE_DIFFICULTY.length)]];
     //     //console.log(randWidth);
-    //     let holeWidth = HOLE_SIZE[HOLE_DIFFICULTY[Math.floor(Math.random() * HOLE_DIFFICULTY.length)]];
+    //     let holeWidth = holeSizes[HOLE_DIFFICULTY[Math.floor(Math.random() * HOLE_DIFFICULTY.length)]];
     //     console.log(holeWidth, findHoleCenter(Math.random() * GAME_HEIGHT, holeWidth));
     //     a--;
     // }
     let holeWidth: number =
-      this.HOLE_SIZE[
+      this.holeSizes[
         this.HOLE_DIFFICULTY[
           Math.floor(Math.random() * this.HOLE_DIFFICULTY.length)
         ]

@@ -1,4 +1,5 @@
 import * as constant from "./../constant";
+import { getSizeX } from "./utility";
 
 export class PipeComponent extends Phaser.Physics.Arcade.Sprite {
   // TODO: can I get sizes from image itself?
@@ -11,7 +12,7 @@ export class PipeComponent extends Phaser.Physics.Arcade.Sprite {
     else image_name = "pipe-1.png";
     super(
       scene,
-      constant.GAME_SIZE_SHORT + PipeComponent.PIPE_WIDTH / 2,
+      getSizeX() + PipeComponent.PIPE_WIDTH / 2,
       y,
       constant.TEXTURES,
       image_name
