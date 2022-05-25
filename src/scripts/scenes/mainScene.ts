@@ -23,6 +23,7 @@ export default class MainScene extends Phaser.Scene {
   private background: Background;
   private pipesTop: Phaser.GameObjects.Group;
   private pipesBottom: Phaser.GameObjects.Group;
+  private baseTiles: Phaser.GameObjects.Group;
   private bird: BirdComponent;
   private spacebarKey: Phaser.Input.Keyboard.Key;
   private escapeKey: Phaser.Input.Keyboard.Key;
@@ -36,13 +37,13 @@ export default class MainScene extends Phaser.Scene {
   create() {
     //new Utility(this);
     this.changeOrientation();
-    this.background = new Background(this);
+    this.background = new Background();
     this.hud = new Hud(this);
     this.rebuildWorldAndHud();
     this.pipesTop = this.physics.add.staticGroup();
     this.pipesBottom = this.physics.add.staticGroup();
     this.bird = new BirdComponent(this);
-    this.createBirdPipesCollision();
+    this.createCollisions();
     this.resetGame();
     this.attachListeners();
     this.setAsPaused();
@@ -50,22 +51,24 @@ export default class MainScene extends Phaser.Scene {
 
   private rebuildWorldAndHud() {
     this.background.buildBackground(this);
+    this.baseTiles = this.physics.add.staticGroup();
+    this.background.getBase().forEach((base) => this.baseTiles.add(base));
     this.attachClickListenerToBackground();
     this.hud.updatePosition();
   }
 
-  private createBirdPipesCollision(): void {
-    //this.physics.add.collider(this.bird, this.pipesTop, this.birdOverlap, undefined, this);
+  private createCollisions(): void {
+    this.makeBirdCollision(this.pipesTop);
+    this.makeBirdCollision(this.pipesBottom);
+    this.makeBirdCollision(this.baseTiles); //this.background.getBase()); - Works even with this, but need baseTiles Group anyway!
+  }
+
+  private makeBirdCollision(
+    objects: Phaser.GameObjects.Group | Array<Phaser.GameObjects.GameObject>
+  ): void {
     this.physics.add.overlap(
       this.bird,
-      this.pipesTop,
-      this.finishGame,
-      undefined,
-      this
-    );
-    this.physics.add.overlap(
-      this.bird,
-      this.pipesBottom,
+      objects,
       this.finishGame,
       undefined,
       this

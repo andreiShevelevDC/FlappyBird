@@ -65,7 +65,13 @@ export class Background {
 
   public getBackground = (): Phaser.GameObjects.TileSprite[] => this.back;
 
-  public getBase = (): Phaser.GameObjects.TileSprite[] => this.base;
+  public getBase(): Phaser.GameObjects.GameObject[] {
+    let baseAsGameObjects: Phaser.GameObjects.GameObject[] = [];
+    this.base.forEach((baseTile) =>
+      baseAsGameObjects.push(baseTile as Phaser.GameObjects.GameObject)
+    );
+    return baseAsGameObjects;
+  }
 
   private deleteBackground(): void {
     for (let i = 0; i < this.back.length; i++) {

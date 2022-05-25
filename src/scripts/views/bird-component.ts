@@ -1,4 +1,5 @@
 import * as constant from "./../constant";
+import { getSizeY } from "./utility";
 
 export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
   private readonly BIRD_SCALE = 1; //1.35;
@@ -39,8 +40,7 @@ export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
   }
 
   // death
-  public isOutOfScreen = (): boolean =>
-    this.y < 0 || this.y > constant.GAME_SIZE_LONG;
+  public isOutOfScreen = (): boolean => this.y < 0 || this.y > getSizeY();
 
   public show(): void {
     this.setVisible(true);
