@@ -15,6 +15,12 @@ export const getCenterY = (): number =>
     ? constant.GAME_SIZE_LONG / 2
     : constant.GAME_SIZE_SHORT / 2;
 
+export const getSizeX = (): number =>
+  isWindowPortrait() ? constant.GAME_SIZE_SHORT : constant.GAME_SIZE_LONG;
+
+export const getSizeY = (): number =>
+  isWindowPortrait() ? constant.GAME_SIZE_LONG : constant.GAME_SIZE_SHORT;
+
 export class Utility {
   private scene: Phaser.Scene;
   private index: number = 0;

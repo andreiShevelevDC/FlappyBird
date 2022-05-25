@@ -37,12 +37,12 @@ export default class MainScene extends Phaser.Scene {
     //new Utility(this);
     this.changeOrientation();
     this.background = new Background(this);
+    this.hud = new Hud(this);
     this.rebuildWorldAndHud();
     this.pipesTop = this.physics.add.staticGroup();
     this.pipesBottom = this.physics.add.staticGroup();
     this.bird = new BirdComponent(this);
     this.createBirdPipesCollision();
-    this.hud = new Hud(this);
     this.resetGame();
     this.attachListeners();
     this.setAsPaused();
@@ -51,6 +51,7 @@ export default class MainScene extends Phaser.Scene {
   private rebuildWorldAndHud() {
     this.background.buildBackground(this);
     this.attachClickListenerToBackground();
+    this.hud.updatePosition();
   }
 
   private createBirdPipesCollision(): void {

@@ -5,6 +5,7 @@
 import * as constant from "./../constant";
 import { TextComponent } from "./text-component";
 import { ImageComponent } from "./image-component";
+import { getCenterY, getSizeX } from "./utility";
 
 export class Hud extends Phaser.GameObjects.Container {
   private readonly SCORE_MESSAGE_TEXT = "Score:";
@@ -29,44 +30,23 @@ export class Hud extends Phaser.GameObjects.Container {
       fill: "#ff0000",
       align: "right",
     };
-    this.scoreMessage = new TextComponent(
-      scene,
-      constant.GAME_SIZE_SHORT - constant.GAME_SIZE_SHORT / 5,
-      20,
-      "",
-      SCORE_STYLE
-    );
+    this.scoreMessage = new TextComponent(scene, 0, 0, "", SCORE_STYLE);
     //export const PAUSE_MESSAGE_TEXT = "Press SPACE to play\n\nESCAPE to pause";
-    this.startImage = new ImageComponent(
-      scene,
-      undefined,
-      undefined,
-      "message.png"
-    );
-    this.finishBack = new ImageComponent(
-      scene,
-      undefined,
-      undefined,
-      "popup.png"
-    );
-    this.finishImage = new ImageComponent(
-      scene,
-      undefined,
-      constant.GAME_SIZE_LONG / 2 - 40,
-      "gameover.png"
-    );
+    this.startImage = new ImageComponent(scene, 0, 0, "message.png");
+    this.finishBack = new ImageComponent(scene, 0, 0, "popup.png");
+    this.finishImage = new ImageComponent(scene, 0, 0, "gameover.png");
     this.finishScoreMessage = new TextComponent(
       scene,
-      undefined,
-      constant.GAME_SIZE_LONG / 2 + 10,
+      0,
+      0,
       "",
       constant.MESSAGE_STYLE
     );
     const FINISH_RESTART_TEXT = "Click or press SPACE\nto restart";
     this.finishRestartMessage = new TextComponent(
       scene,
-      undefined,
-      constant.GAME_SIZE_LONG / 2 + 50,
+      0,
+      0,
       FINISH_RESTART_TEXT,
       constant.MESSAGE_STYLE
     );
@@ -78,6 +58,16 @@ export class Hud extends Phaser.GameObjects.Container {
       yoyo: true,
       repeat: -1,
     });
+  }
+
+  // updates position of all hud elements on change orientation
+  public updatePosition(): void {
+    this.scoreMessage.setPosition(getSizeX() - 60, 20);
+    this.startImage.setPosition(undefined, undefined);
+    this.finishBack.setPosition(undefined, undefined);
+    this.finishImage.setPosition(undefined, getCenterY() - 40);
+    this.finishScoreMessage.setPosition(undefined, getCenterY() + 10);
+    this.finishRestartMessage.setPosition(undefined, getCenterY() + 50);
   }
 
   public updateScore(): void {

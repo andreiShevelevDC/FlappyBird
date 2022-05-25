@@ -1,4 +1,5 @@
 import * as constant from "../constant";
+import { getSizeX, getSizeY } from "./utility";
 
 export class Background {
   private readonly TILE_WIDTH = 288;
@@ -7,16 +8,14 @@ export class Background {
   private back: Phaser.GameObjects.TileSprite[] = [];
   private base: Phaser.GameObjects.TileSprite[] = [];
 
-  public constructor(scene: Phaser.Scene) {
+  public constructor() {
     //this.buildBackground(scene);
   }
 
   public buildBackground(scene: Phaser.Scene): void {
     this.deleteBackground();
     let tile: Phaser.GameObjects.TileSprite;
-    let tilesNum: number = Math.ceil(
-      constant.GAME_SIZE_SHORT / this.TILE_WIDTH
-    );
+    let tilesNum: number = Math.ceil(getSizeX() / this.TILE_WIDTH);
     for (let i = 0; i < tilesNum; i++) {
       tile = new Phaser.GameObjects.TileSprite(
         scene,
@@ -33,15 +32,13 @@ export class Background {
       this.back[i] = tile;
     }
     let base_tile: Phaser.GameObjects.TileSprite;
-    let basesNum: number = Math.ceil(
-      constant.GAME_SIZE_SHORT / this.BASE_WIDTH
-    );
+    let basesNum: number = Math.ceil(getSizeX() / this.BASE_WIDTH);
     if (basesNum === 1) basesNum++;
     for (let i = 0; i < basesNum; i++) {
       base_tile = new Phaser.GameObjects.TileSprite(
         scene,
         i * this.BASE_WIDTH,
-        constant.GAME_SIZE_LONG - this.BASE_HEIGHT + 100, // TODO Why need 100?
+        getSizeY() - this.BASE_HEIGHT + 100, // TODO Why need 100?
         this.BASE_WIDTH,
         this.BASE_HEIGHT,
         constant.TEXTURES,
@@ -67,6 +64,8 @@ export class Background {
   }
 
   public getBackground = (): Phaser.GameObjects.TileSprite[] => this.back;
+
+  public getBase = (): Phaser.GameObjects.TileSprite[] => this.base;
 
   private deleteBackground(): void {
     for (let i = 0; i < this.back.length; i++) {

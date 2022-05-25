@@ -25,4 +25,13 @@ export class ImageComponent extends Phaser.GameObjects.Image {
   public hide(): void {
     this.setVisible(false);
   }
+
+  public setPosition(
+    x: number = getCenterX(),
+    y: number = getCenterY(),
+    z?: number,
+    w?: number
+  ): this {
+    return super.setPosition(x, y, z, w);
+  }
 }

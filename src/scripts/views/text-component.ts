@@ -23,4 +23,13 @@ export class TextComponent extends Phaser.GameObjects.Text {
   public hide(): void {
     (this as Phaser.GameObjects.Text).setVisible(false);
   }
+
+  public setPosition(
+    x: number = getCenterX(),
+    y: number = getCenterX(),
+    z?: number,
+    w?: number
+  ): this {
+    return super.setPosition(x, y, z, w);
+  }
 }
