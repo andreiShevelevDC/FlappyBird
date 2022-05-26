@@ -46,7 +46,7 @@ export default class MainScene extends Phaser.Scene {
     this.createCollisions();
     this.resetGame();
     this.attachListeners();
-    this.setAsPaused();
+    this.setPause();
   }
 
   private rebuildWorldAndHud() {
@@ -96,7 +96,7 @@ export default class MainScene extends Phaser.Scene {
     this.scoreSpeedUpStep = 1;
     this.bird.resetPosition();
     this.addPipes();
-    this.setAsPaused();
+    this.setPause();
   }
 
   private clearPipesOnFinish(): void {
@@ -179,7 +179,7 @@ export default class MainScene extends Phaser.Scene {
     );
   }
 
-  private setAsPaused(): void {
+  private setPause(): void {
     //console.log(" * Pause");
     this.gameState = GAME_STATE.PAUSE;
     this.bird.hide();
@@ -222,22 +222,26 @@ export default class MainScene extends Phaser.Scene {
       Phaser.Input.Keyboard.JustDown(this.escapeKey) &&
       this.gameState === GAME_STATE.PLAY
     ) {
-      this.setAsPaused();
+      this.setPause();
     }
-    if (Phaser.Input.Keyboard.JustDown(this.spacebarKey)) {
-      if (this.gameState !== GAME_STATE.FINISH) {
-        this.birdFlap();
-        this.bird.anims.play("flap");
-      } else this.resetGame();
-    }
+    if (Phaser.Input.Keyboard.JustDown(this.spacebarKey))
+      this.userPrimaryInputReaction();
   }
 
   private onClick(): void {
+    //console.log(this.gameState);
+    this.userPrimaryInputReaction();
+  }
+
+  // Left button click or SPACE press
+  private userPrimaryInputReaction(): void {
     switch (this.gameState) {
       case GAME_STATE.PLAY:
-      case GAME_STATE.PAUSE:
         this.birdFlap();
         this.bird.anims.play("flap");
+        break;
+      case GAME_STATE.PAUSE:
+        this.setPlay();
         break;
       case GAME_STATE.FINISH:
         this.resetGame();
@@ -312,11 +316,13 @@ export default class MainScene extends Phaser.Scene {
       this.verticalMode = true;
       this.scale.setGameSize(constant.GAME_SIZE_SHORT, constant.GAME_SIZE_LONG);
       this.rebuildWorldAndHud();
+      this.bird.updateYPositionOnOrientationChange();
     }
     if (orientation && this.verticalMode) {
       this.verticalMode = false;
       this.scale.setGameSize(constant.GAME_SIZE_LONG, constant.GAME_SIZE_SHORT);
       this.rebuildWorldAndHud();
+      this.bird.updateYPositionOnOrientationChange();
     }
   }
 }

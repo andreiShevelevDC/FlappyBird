@@ -1,5 +1,5 @@
 import * as constant from "./../constant";
-import { getSizeY } from "./utility";
+import { isWindowPortrait, getSizeY } from "./utility";
 
 export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
   private readonly BIRD_SCALE = 1; //1.35;
@@ -37,6 +37,16 @@ export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
 
   public resetPosition(): void {
     this.setPosition(constant.BIRD_POS_X, constant.BIRD_POS_Y);
+  }
+
+  public updateYPositionOnOrientationChange(): void {
+    let currentPosY: number = this.getCenter().y;
+    console.log("Bird pos: ", currentPosY);
+    let previousOrientationHeight: number = !isWindowPortrait()
+      ? currentPosY / constant.GAME_SIZE_SHORT
+      : currentPosY / constant.GAME_SIZE_LONG;
+    this.setY(getSizeY() * previousOrientationHeight);
+    console.log("New pos: ", this.getCenter().y);
   }
 
   // death
