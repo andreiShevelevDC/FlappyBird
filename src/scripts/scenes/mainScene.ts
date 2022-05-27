@@ -3,7 +3,7 @@ import { BirdComponent } from "../views/bird-component";
 import { PipeComponent } from "../views/pipe-component";
 import { Background } from "../views/background";
 import { Hud } from "../views/hud";
-import { getCenterY, getSizeY, Utility } from "../views/utility";
+import { getSizeX, getCenterY, getSizeY, Utility } from "../views/utility";
 
 enum GAME_STATE {
   PLAY,
@@ -54,6 +54,7 @@ export default class MainScene extends Phaser.Scene {
     this.makeBirdCollision(this.baseTiles);
     this.attachClickListenerToBackground();
     this.hud.updatePosition();
+    this.updateHoleSizes();
   }
 
   private preparePipes(): void {
@@ -111,30 +112,42 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
-  private readonly PIPE_NUM = 1.5; //3.2;
-  private holeGapStep = getSizeY() / this.PIPE_NUM;
-  // vertical hole (distance between top and bottom pipe) sizes
-  private holeSizes = [
-    (this.holeGapStep * this.PIPE_NUM) / 1.2,
-    (this.holeGapStep * this.PIPE_NUM) / 1.6,
-    (this.holeGapStep * this.PIPE_NUM) / 2,
-    (this.holeGapStep * this.PIPE_NUM) / 3,
-    (this.holeGapStep * this.PIPE_NUM) / 3.6,
-  ];
+  //private readonly PIPE_NUM = 1.5; //3.2;
+  private readonly PIPE_X_DISTANCE = constant.GAME_SIZE_SHORT / 1.8;
+  private readonly SMALLEST_GAP = 100;
+  private readonly BASE_HEIGHT = 80;
+  private biggestGap: number;
+  private gapStep: number;
+  private holeSizes: number[] = [];
+
+  private updateHoleSizes(): void {
+    this.biggestGap = getSizeY() - this.SMALLEST_GAP - this.BASE_HEIGHT;
+    this.gapStep = (this.biggestGap - this.SMALLEST_GAP) / 3;
+    this.holeSizes = [
+      this.biggestGap,
+      this.biggestGap - this.gapStep,
+      this.biggestGap - this.gapStep * 2,
+      this.SMALLEST_GAP,
+    ];
+  }
+
+  private prevHoleCenter: number = getCenterY() - this.BASE_HEIGHT / 2;
+
   // clamps center of the hole to fit it whole on the screen
   // while making it's not too different in position from previous hole
-  private prevHoleCenter: number = getCenterY() - 30; // to adjust for base height
   private findHoleCenter = (holeWidth: number): number => {
-    const RAND_Y = (Math.random() * getSizeY()) / 1.3;
-    let center: number = Math.min(
+    const RAND_Y = Math.random() * (getSizeY() - this.BASE_HEIGHT);
+    let center: number = Math.max(
       RAND_Y,
-      getSizeY() / 1.3 - holeWidth / 2,
-      this.prevHoleCenter + this.holeGapStep
-    );
-    center = Math.max(
-      center,
       holeWidth / 2,
-      this.prevHoleCenter - this.holeGapStep
+      this.prevHoleCenter - getSizeY() / 2.5, // to exclude dramatic height change for small gaps
+      getSizeY() - this.BASE_HEIGHT - holeWidth / 2 - PipeComponent.PIPE_HEIGHT // to exclude wrong side gaps
+    );
+    center = Math.min(
+      center,
+      getSizeY() - holeWidth / 2 - this.BASE_HEIGHT,
+      this.prevHoleCenter + getSizeY() / 2.5,
+      holeWidth / 2 + PipeComponent.PIPE_HEIGHT
     );
     return center;
   };
@@ -142,7 +155,7 @@ export default class MainScene extends Phaser.Scene {
   // hole sizes (index from holeSizes)
   // number of repetitions of each value affects probability of appearing
   private readonly HOLE_DIFFICULTY = [
-    1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4,
+    0, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3,
   ];
 
   private addPipes(): void {
@@ -295,16 +308,14 @@ export default class MainScene extends Phaser.Scene {
         (allPipesTop[i] as PipeComponent).move(this.gameSpeed);
         (allPipesBottom[i] as PipeComponent).move(this.gameSpeed);
         this.countScore(allPipesTop[i] as PipeComponent);
-        // create a new pair of pipes,
-        // if the last (newest) pair has moved more than PIPE_GAP_STEP
-        const PIPE_GAP_STEP = constant.GAME_SIZE_SHORT / this.PIPE_NUM;
-        if (
-          i === allPipesTop.length - 1 &&
-          (allPipesTop[i] as Phaser.Physics.Arcade.Sprite).x <
-            constant.GAME_SIZE_SHORT - PIPE_GAP_STEP
-        )
-          this.addPipes();
       }
+      // create a new pair of pipes,
+      if (
+        (allPipesTop[allPipesTop.length - 1] as Phaser.Physics.Arcade.Sprite)
+          .x <
+        getSizeX() - this.PIPE_X_DISTANCE
+      )
+        this.addPipes();
       this.speedGameUp();
       this.destroyInvisiblePipes(allPipesTop, allPipesBottom);
     }
