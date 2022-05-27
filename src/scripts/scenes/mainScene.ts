@@ -39,28 +39,29 @@ export default class MainScene extends Phaser.Scene {
     this.changeOrientation();
     this.background = new Background();
     this.hud = new Hud(this);
-    this.rebuildWorldAndHud();
-    this.pipesTop = this.physics.add.staticGroup();
-    this.pipesBottom = this.physics.add.staticGroup();
     this.bird = new BirdComponent(this);
-    this.createCollisions();
+    this.preparePipes();
+    this.rebuildWorldAndHud();
     this.resetGame();
     this.attachListeners();
     this.setPause();
   }
 
-  private rebuildWorldAndHud() {
+  private rebuildWorldAndHud(): void {
     this.background.buildBackground(this);
     this.baseTiles = this.physics.add.staticGroup();
     this.background.getBase().forEach((base) => this.baseTiles.add(base));
+    this.makeBirdCollision(this.baseTiles);
     this.attachClickListenerToBackground();
     this.hud.updatePosition();
   }
 
-  private createCollisions(): void {
+  private preparePipes(): void {
+    this.pipesTop = this.physics.add.staticGroup();
+    this.pipesBottom = this.physics.add.staticGroup();
     this.makeBirdCollision(this.pipesTop);
     this.makeBirdCollision(this.pipesBottom);
-    this.makeBirdCollision(this.baseTiles); //this.background.getBase()); - Works even with this, but need baseTiles Group anyway!
+    //this.makeBirdCollision(this.baseTiles); //this.background.getBase()); - Works even with this, but need baseTiles Group anyway!
   }
 
   private makeBirdCollision(

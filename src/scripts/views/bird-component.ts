@@ -41,12 +41,10 @@ export class BirdComponent extends Phaser.Physics.Arcade.Sprite {
 
   public updateYPositionOnOrientationChange(): void {
     let currentPosY: number = this.getCenter().y;
-    console.log("Bird pos: ", currentPosY);
-    let previousOrientationHeight: number = !isWindowPortrait()
+    let relativeHeight: number = isWindowPortrait()
       ? currentPosY / constant.GAME_SIZE_SHORT
       : currentPosY / constant.GAME_SIZE_LONG;
-    this.setY(getSizeY() * previousOrientationHeight);
-    console.log("New pos: ", this.getCenter().y);
+    this.setY(getSizeY() * relativeHeight);
   }
 
   // death
